@@ -1,9 +1,15 @@
-import { response, Response } from "express";
+export class Success<T> {
+  constructor(
+    private httpStatusCode: number,
+    private message?: string,
+    private data?: T
+  ) {}
 
-response.success = (
-  httpStatusCode: number,
-  message: string,
-  data: any = null
-): Response => {
-  return response.status(httpStatusCode).json({ message, data });
-};
+  get JSON() {
+    return {
+      statusCode: this.httpStatusCode,
+      message: this.message,
+      data: this.data,
+    };
+  }
+}

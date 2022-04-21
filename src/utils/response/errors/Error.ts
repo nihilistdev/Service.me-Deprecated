@@ -1,9 +1,3 @@
-import {
-  ErrorResponse,
-  ErrorType,
-  ErrorValidation,
-} from "../../../types/errors/ErrorTypes";
-
 export class HandleError extends Error {
   constructor(
     private statusCode: number,

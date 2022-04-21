@@ -2,14 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import validator from "validator";
 
 import { HandleError } from "../../../utils/response/errors/Error";
-import { ErrorValidation } from "../../../types/errors/ErrorTypes";
 
 export const registerValidator = (
   req: Request,
   _: Response,
   next: NextFunction
 ) => {
-  let { email, password, confirmPassword } = req.body;
+  let { name, last_name, email, username, password, confirmPassword } =
+    req.body;
 
   const errorValidator: ErrorValidation[] = [...new Array()];
 
@@ -23,7 +23,13 @@ export const registerValidator = (
     errorValidator.push({ email: "Email is required" });
   if (validator.isEmpty(password))
     errorValidator.push({ password: "Password is required" });
-  if (validator.isLength(password, { min: 6 }))
+  if (validator.isEmpty(name))
+    errorValidator.push({ name: "Name cannot be ampty" });
+  if (validator.isEmpty(last_name))
+    errorValidator.push({ last_name: "Name cannot be ampty" });
+  if (validator.isEmpty(username))
+    errorValidator.push({ username: "Name cannot be ampty" });
+  if (!validator.isLength(password, { min: 6 }))
     errorValidator.push({ password: "Password must be at least 6 characters" });
   if (validator.isEmpty(confirmPassword))
     errorValidator.push({ confirmPassword: "Confirm password is reuired" });

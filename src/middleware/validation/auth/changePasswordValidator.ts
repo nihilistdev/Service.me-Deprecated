@@ -2,11 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import validator from "validator";
 
 import { HandleError } from "../../../utils/response/errors/Error";
-import { ErrorValidation } from "../../../types/errors/ErrorTypes";
 
 export const validateChangePassword = (
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
 ) => {
   let { password, passwordNew, confirmPassword } = req.body;
