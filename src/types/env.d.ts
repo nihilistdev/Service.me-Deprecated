@@ -10,8 +10,10 @@ declare global {
       PG_PASSWORD: string;
       JWT_SECRET: string;
       JWT_EXPIRATION: string;
+      REDIS: string;
+      SESSION_SECRET: string;
     }
   }
 }
 
-export {}
+export {};
