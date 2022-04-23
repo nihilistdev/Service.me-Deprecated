@@ -2,7 +2,7 @@ export class Success<T> {
   constructor(
     private httpStatusCode: number,
     private message?: string,
-    private data?: T
+    private data?: T | T[]
   ) {}
 
   get JSON() {

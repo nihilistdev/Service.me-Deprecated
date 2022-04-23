@@ -3,6 +3,7 @@ import { User } from "../../database/entities/user/user";
 import { db } from "../../database/config/ormconfig";
 import { HandleError } from "../../utils/response/errors/Error";
 import { ConsoleDebug } from "../../utils/console/console";
+import { v4 } from "uuid";
 import argon2 from "argon2";
 import Success from "../../utils/response/success";
 
@@ -45,7 +46,8 @@ export const RegisterController = async (
         );
         return next(error);
       }
-
+      const token = v4();
+      req.redis.setKey(token, query.raw[0].id, "Verify-Account");
       const success = new Success(200, "User created successfuly");
       return res.json(success.JSON);
     } catch (err) {

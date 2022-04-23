@@ -41,7 +41,6 @@ export const LoginController = async (
     try {
       const token = handleJwtToken(tokenData);
       const success = new Success(200, `Bearer ${token}`);
-      req.redis.setKey(token, user.id);
       req.session.userId = user.id;
       return res.json(success.JSON);
     } catch (err) {

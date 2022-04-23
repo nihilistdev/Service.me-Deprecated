@@ -1,6 +1,9 @@
 import IORedis, { Redis } from "ioredis";
-import { ACCOUNT_VERIFICATION_PREFIX } from "../utils/constants/constants";
 import { Request, Response, NextFunction } from "express";
+import {
+  FORGOT_PASSWORD_PREFIX,
+  ACCOUNT_VERIFICATION_PREFIX,
+} from "../utils/constants/constants";
 
 export class RedisContext implements RedisContextTypes {
   constructor(private redis: Redis) {}
@@ -22,15 +25,13 @@ export class RedisContext implements RedisContextTypes {
     return await this.redis.get(key);
   }
 
-  /**
-   * Sets the token and userId
-   * @param token
-   * @param userId
-   * @returns Promise<"OK" | null>
-   */
-  public async setKey(token: string, userId: number): Promise<"OK" | null> {
+  public async setKey(
+    token: string,
+    userId: number,
+    setType: typeof FORGOT_PASSWORD_PREFIX | typeof ACCOUNT_VERIFICATION_PREFIX
+  ): Promise<"OK" | null> {
     return await this.redis.set(
-      ACCOUNT_VERIFICATION_PREFIX + token,
+      setType + token,
       userId,
       "ex",
       1000 * 60 * 60 * 24 * 3
