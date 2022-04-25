@@ -6,4 +6,7 @@ export const errorHandle = (
   _: Request,
   res: Response,
   __: NextFunction
-) => res.status(err.httpStatusCode).json(err.JSON);
+) =>
+  res
+    .status(err.httpStatusCode | 403)
+    .json(!err.JSON ? { csrfError: "Token error" } : err.JSON);
