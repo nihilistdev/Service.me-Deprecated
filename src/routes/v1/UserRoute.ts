@@ -1,9 +1,20 @@
 import { Router } from "express";
-import { forgotPassword } from "../../controllers/user/forgotPassword";
-import { forgotPasswordValidator } from "../../middleware/validation/users/forgotPasswordValidator";
+import { isAuth } from "../../middleware/isAuth";
+import csurf from "csurf";
+
+// Controllers
+import { UpdateUserContrller } from "../../controllers/user";
+
+// Validators
+import { updateUserValidator } from "../../middleware/validation/users";
 
 const router = Router();
+const csrfMiddleware = csurf({ cookie: true });
 
-router.post("/forgot-password", [forgotPasswordValidator], forgotPassword);
+router.post(
+  "/update/:id",
+  [isAuth, csrfMiddleware, updateUserValidator],
+  UpdateUserContrller
+);
 
 export default router;

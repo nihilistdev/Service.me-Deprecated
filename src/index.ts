@@ -7,8 +7,6 @@ import fs from "fs";
 import path from "path";
 import morgan from "morgan";
 import ConsoleDebug from "./utils/console";
-import { errorHandle } from "./middleware/handleError";
-import { connDb } from "./database/createConnection";
 import routes from "./routes";
 import connectRedis from "connect-redis";
 import session from "express-session";
@@ -16,6 +14,8 @@ import Redis from "ioredis";
 import { isProd } from "./utils/isProd/isProd";
 import { COOKIE_NAME } from "./utils/constants/constants";
 import { RedisContext } from "./context/Redis";
+import { errorHandle } from "./middleware/handleError";
+import { connDb } from "./database/createConnection";
 
 export const app = express();
 const RedisStore = connectRedis(session);

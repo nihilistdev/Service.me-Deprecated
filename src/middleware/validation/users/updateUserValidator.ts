@@ -1,16 +1,24 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "src/database/entities/user/user";
+import { User } from "../../../database/entities/user/user";
 import validator from "validator";
 import HandleError from "../../../utils/response/errors";
 
-export const updateUser = async (
+export const updateUserValidator = async (
   req: Request,
   _: Response,
   next: NextFunction
 ) => {
   let { name, last_name, email, username } = req.body;
   const errorValidation: ErrorValidation[] = [...new Array()];
-
+  const authHeader = req.get("Authorization");
+  if (!authHeader) {
+    const error = new HandleError(
+      400,
+      "General",
+      "Authorization header not provided"
+    );
+    return next(error);
+  }
   if (!name && !last_name && !email && !username) {
     errorValidation.push({ data: "Some of user data is missing" });
   }

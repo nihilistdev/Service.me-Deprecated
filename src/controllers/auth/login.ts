@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { User } from "../../database/entities/user/user";
 import argon2 from "argon2";
 import HandleError from "../../utils/response/errors";
-import { handleJwtToken } from "../../utils/jwt/handleJwtToken";
 import { ConsoleDebug } from "../../utils/console/console";
 import Success from "../../utils/response/success";
 
@@ -30,17 +29,8 @@ export const LoginController = async (
       return next(error);
     }
 
-    const tokenData: JwtPayload = {
-      id: user.id,
-      name: user.name,
-      surname: user.last_name,
-      email: user.email,
-      create_at: user.created_at,
-    };
-
     try {
-      const token = handleJwtToken(tokenData);
-      const success = new Success(200, `Bearer ${token}`);
+      const success = new Success(200, `Logged in successfuly`);
       req.session.userId = user.id;
       return res.json(success.JSON);
     } catch (err) {
