@@ -11,6 +11,8 @@ import routes from "./routes";
 import connectRedis from "connect-redis";
 import session from "express-session";
 import Redis from "ioredis";
+import csurf from "csurf";
+import cookieParser from "cookie-parser";
 import { isProd } from "./utils/isProd/isProd";
 import { COOKIE_NAME } from "./utils/constants/constants";
 import { RedisContext } from "./context/Redis";
@@ -25,6 +27,15 @@ app.use(cors());
 app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
+app.use(
+  csurf({
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+    },
+  })
+);
 app.use(
   session({
     name: COOKIE_NAME,

@@ -10,18 +10,10 @@ export const updateUserValidator = async (
 ) => {
   let { name, last_name, email, username } = req.body;
   const errorValidation: ErrorValidation[] = [...new Array()];
-  const authHeader = req.get("Authorization");
-  if (!authHeader) {
-    const error = new HandleError(
-      400,
-      "General",
-      "Authorization header not provided"
-    );
-    return next(error);
-  }
-  if (!name && !last_name && !email && !username) {
-    errorValidation.push({ data: "Some of user data is missing" });
-  }
+
+  // if (!name && !last_name && !email && !username) {
+  //   errorValidation.push({ data: "Some of user data is missing" });
+  // }
 
   if (await User.findOne({ where: { username } })) {
     errorValidation.push({ username: "User already exists by this username" });
