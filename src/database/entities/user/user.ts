@@ -27,8 +27,11 @@ export class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: false })
   confirmed: boolean;
+
+  @Column({ nullable: true, default: true })
+  isActive: boolean;
 
   @CreateDateColumn()
   created_at: Date;

@@ -47,7 +47,7 @@ export const RegisterController = async (
         return next(error);
       }
       const token = v4();
-      req.redis.setKey(token, query.raw[0].id, "Verify-Account");
+      await req.redis.setKey(token, query.raw[0].id, "Verify-Account");
       const success = new Success(200, "User created successfuly");
       return res.json(success.JSON);
     } catch (err) {

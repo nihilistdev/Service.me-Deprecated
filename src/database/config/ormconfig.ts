@@ -10,7 +10,7 @@ export const db: DataSource = new DataSource({
   password: process.env.PG_PASSWORD,
   database: process.env.PG_DATABASE,
   synchronize: !isProd(),
-  logging: !!isProd(),
+  logging: !isProd(),
   entities: ["./dist/database/entities/**/**.js"],
   migrations: ["./dist/database/migrations/*.js"],
   namingStrategy: new SnakeNamingStrategy(),

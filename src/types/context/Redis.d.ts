@@ -13,7 +13,6 @@ export declare global {
         | typeof ACCOUNT_VERIFICATION_PREFIX
     ): Promise<"OK" | null>;
     isConnected(): IORedis.OverloadedSubCommand<IORedis.ValueType, any>;
-    blackListToken(token: string): Promise<"OK" | null>;
-    isTokenBlacklisted(token): Promise<boolean>;
+    delete(key: string): Promise<number>;
   }
 }

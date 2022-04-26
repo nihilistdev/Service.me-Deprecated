@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../../../database/entities/user/user";
 import validator from "validator";
 import HandleError from "../../../utils/response/errors";
 
@@ -11,16 +10,8 @@ export const updateUserValidator = async (
   let { name, last_name, email, username } = req.body;
   const errorValidation: ErrorValidation[] = [...new Array()];
 
-  // if (!name && !last_name && !email && !username) {
-  //   errorValidation.push({ data: "Some of user data is missing" });
-  // }
-
-  if (await User.findOne({ where: { username } })) {
-    errorValidation.push({ username: "User already exists by this username" });
-  }
-
-  if (await User.findOne({ where: { email } })) {
-    errorValidation.push({ email: "User by this email already exists" });
+  if (!name && !last_name && !email && !username) {
+    errorValidation.push({ data: "Some of user data is missing" });
   }
 
   if (validator.contains(name, `!@#$%^&*()_+-=[]{}\|;:'",.<>/?`)) {

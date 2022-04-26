@@ -4,7 +4,7 @@ import {
   FORGOT_PASSWORD_PREFIX,
   ACCOUNT_VERIFICATION_PREFIX,
 } from "../utils/constants/constants";
-import { v4 } from "uuid";
+
 export class RedisContext implements RedisContextTypes {
   constructor(private redis: Redis) {}
 
@@ -38,15 +38,7 @@ export class RedisContext implements RedisContextTypes {
     );
   }
 
-  public async blackListToken(token: string): Promise<"OK" | null> {
-    return await this.redis.set(token, `BlacklistToken -> ${v4()}`, "ex", 2);
-  }
-
-  public async isTokenBlacklisted(token: string): Promise<boolean> {
-    const check = this.redis.get(token);
-    if (check !== null) {
-      return true;
-    }
-    return false;
+  public async delete(key: string): Promise<number> {
+    return await this.redis.del(key);
   }
 }

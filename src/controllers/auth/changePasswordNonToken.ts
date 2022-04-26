@@ -29,11 +29,11 @@ export const changePasswordNonJwtToken = async (
     let hashPassword = await argon2.hash(newPassword);
     await User.update(
       {
-        password: hashPassword,
+        id: user.id,
       },
-      { id: user.id }
+      { password: hashPassword }
     );
-
+    await req.redis.delete(FORGOT_PASSWORD_PREFIX + token);
     const success = new Success(200, "Your password is successfully updated!");
     return res.json(success.JSON);
   } catch (err) {

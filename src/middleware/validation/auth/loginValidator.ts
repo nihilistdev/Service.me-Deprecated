@@ -8,15 +8,13 @@ export const loginValidator = (
   _: Response,
   next: NextFunction
 ) => {
-  let { email, password } = req.body;
+  let { emailOrUsername, password }: { [key: string]: string } = req.body;
   const errorValidations: ErrorValidation[] = [...new Array()];
 
-  email = !email ? "" : email;
+  emailOrUsername = !emailOrUsername ? "" : emailOrUsername;
   password = !password ? "" : password;
 
-  if (!validator.isEmail(email))
-    errorValidations.push({ email: "Email is not valid email" });
-  if (validator.isEmpty(email))
+  if (validator.isEmpty(emailOrUsername))
     errorValidations.push({ email: "Email field is required" });
   if (validator.isEmpty(password))
     errorValidations.push({ password: "Password is required" });

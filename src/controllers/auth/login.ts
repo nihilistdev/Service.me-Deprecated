@@ -10,10 +10,14 @@ export const LoginController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { email, password } = req.body;
+  const { emailOrUsername, password }: { [key: string]: string } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne(
+      emailOrUsername.includes("@")
+        ? { where: { email: emailOrUsername } }
+        : { where: { username: emailOrUsername } }
+    );
     if (!user) {
       const error = new HandleError(404, "General", "Not found", [
         "Incorrect email or password",
@@ -21,7 +25,16 @@ export const LoginController = async (
       return next(error);
     }
 
-    let valid = argon2.verify(user.password, password);
+    if (!user.confirmed || user.confirmed === null) {
+      const error = new HandleError(
+        403,
+        "Unauthorized",
+        "You must activate your account in order to log in"
+      );
+      return next(error);
+    }
+
+    let valid = await argon2.verify(user.password, password);
     if (!valid) {
       const error = new HandleError(404, "General", "Password", [
         `Password doesn't match one in database`,
