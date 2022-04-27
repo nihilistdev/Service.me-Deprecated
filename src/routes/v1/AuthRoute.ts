@@ -8,6 +8,7 @@ import {
   changePasswordNonJwtToken,
   forgotPassword,
   logoutContoller,
+  verifyAccount,
 } from "../../controllers/auth";
 
 // Validators
@@ -28,6 +29,7 @@ router.post(
   changePasswordNonJwtToken
 );
 router.post("/forgot-password", [forgotPasswordValidator], forgotPassword);
+router.post("/verify-account/:token", [], verifyAccount);
 router.post("/logout", [isAuth], logoutContoller);
 
 export default router;
