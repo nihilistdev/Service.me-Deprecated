@@ -8,7 +8,7 @@
     "start:watch": "tsc -w",
     "start:dev": "nodemon dist/index.js",
     "gen:types-development": "npx gen-env-types config/.env.developmet -o src/types/env.d.ts",
-    "gen:migrations": "typeorm-ts-node-esm -d ./src/database/ormconfig.js migration:generate -n serviceme",
+    "gen:migrations": "typeorm -d ./src/database/ormconfig.js migration:generate -n serviceme",
     "revert:migrations": "typeorm migration:revert",
     "run:migrations": "typeorm migration:run",
     "typeorm": "typeorm-ts-node-esm -d ./src/database/dbConfig.ts",

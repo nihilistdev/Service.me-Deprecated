@@ -8,25 +8,33 @@ export const ValidateCreateCustomer = (
   _: Response,
   next: NextFunction
 ) => {
-  let { name, last_name, email, pin } = req.body;
+  let { name, last_name, email, pin, phone } = req.body;
 
-  const errors: ErrorValidation[] = [...new Array()];
+  name = !name ? "" : name;
+  last_name = !last_name ? "" : last_name;
+  email = !email ? "" : email;
+  pin = !pin ? "" : pin;
+  phone = !phone ? "" : phone;
 
-  if (validator.isEmpty(name)) errors.push({ name: "Name is required" });
+  const errorValidator: ErrorValidation[] = [...new Array()];
+
+  if (validator.isEmpty(name))
+    errorValidator.push({ name: "Name is required" });
   if (validator.isEmpty(last_name))
-    errors.push({ last_name: "Last name is required" });
+    errorValidator.push({ last_name: "Last name is required" });
   if (!validator.isEmail(email))
-    errors.push({ email: "Valid email must be provided" });
-  if (validator.isNumeric(pin)) errors.push({ pin: "PIN must be number" });
+    errorValidator.push({ email: "Valid email must be provided" });
+  if (validator.isEmpty(phone))
+    errorValidator.push({ phone: "Phone is empty and required" });
 
-  if (errors.length !== 0) {
+  if (errorValidator.length !== 0) {
     const error = new HandleError(
       400,
       "Validation",
       "Validation erorr",
       null,
       null,
-      errors
+      errorValidator
     );
     return next(error);
   }

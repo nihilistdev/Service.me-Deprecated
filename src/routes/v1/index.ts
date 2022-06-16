@@ -8,7 +8,7 @@ const router = Router();
 
 router.use("/auth", AuthRoute);
 router.use("/user", UserRoute);
-router.use("/csrf", Csrf);
 router.use("/customer", Customer);
+router.use("/csrf", Csrf);
 
 export default router;

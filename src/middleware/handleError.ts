@@ -7,6 +7,14 @@ export const errorHandle = (
   res: Response,
   __: NextFunction
 ) =>
-  res
-    .status(err.httpStatusCode | 403)
-    .json(!err.JSON ? { csrfError: "Token error" } : err.JSON);
+  res.status(err.httpStatusCode | 403).json(
+    !err.JSON
+      ? {
+          csrfError: {
+            name: err.name,
+            message: err.message,
+            stack: err.stack,
+          },
+        }
+      : err.JSON
+  );

@@ -4,12 +4,13 @@ import { db } from "../../database/config/ormconfig";
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
 
-export const CreateCustomer = async (
+export const CreateCustomerController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { name, last_name, email, pin } = req.body;
+  const { name, last_name, email, pin, phone }: { [key: string]: string } =
+    req.body;
 
   try {
     const query = await db
@@ -20,7 +21,8 @@ export const CreateCustomer = async (
         name: name,
         last_name: last_name,
         email: email,
-        pin: pin,
+        pin: parseInt(pin),
+        phone,
       })
       .returning("*")
       .execute();

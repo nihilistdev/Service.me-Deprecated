@@ -1,5 +1,13 @@
-import { Column, BaseEntity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Entity,
+} from "typeorm";
 
+@Entity()
 export class Customers extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -18,4 +26,10 @@ export class Customers extends BaseEntity {
 
   @Column()
   phone!: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }
