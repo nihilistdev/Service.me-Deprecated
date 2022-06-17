@@ -2,7 +2,7 @@ import { Router } from "express";
 import { isAuth } from "../../middleware/isAuth";
 
 import { CreateCustomerController } from "../../controllers/customers";
-import { UpdateCustomerController } from "../../controllers/customers/updateCustomersController";
+import { UpdateCustomerController } from "../../controllers/customers";
 
 import { ValidateCreateCustomer } from "../../middleware/validation/customer";
 

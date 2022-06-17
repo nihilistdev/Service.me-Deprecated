@@ -12,7 +12,6 @@ export const UpdateCustomerController = async (
   const id = parseInt(req.params.id);
   const { name, last_name, email, pin, phone }: { [key: string]: string } =
     req.body;
-console.log(id);
   try {
     const customer = await Customers.findOne({ where: { id } });
     if (!customer) {
@@ -32,7 +31,6 @@ console.log(id);
       .where("id = :id", { id })
       .returning("*")
       .execute();
-    console.log(query);
     if (!query.raw[0]) {
       return next(
         new HandleError(
