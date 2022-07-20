@@ -17,8 +17,8 @@ export const UpdateCustomerController = async (
     if (!customer) {
       return next(new HandleError(400, "Raw", "There is no user by this id"));
     }
-      
-    const query = await db
+
+    const query = await db()
       .createQueryBuilder()
       .update(Customers)
       .set({

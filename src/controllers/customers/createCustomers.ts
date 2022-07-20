@@ -13,7 +13,7 @@ export const CreateCustomerController = async (
     req.body;
 
   try {
-    const query = await db
+    const query = await db()
       .createQueryBuilder()
       .insert()
       .into(Customers)

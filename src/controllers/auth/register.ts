@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { User } from "../../database/entities/user/user";
 import { db } from "../../database/config/ormconfig";
 import { HandleError } from "../../utils/response/errors/Error";
-import { ConsoleDebug } from "../../utils/console/console";
 import { v4 } from "uuid";
 import argon2 from "argon2";
 import Success from "../../utils/response/success";
@@ -24,7 +23,7 @@ export const RegisterController = async (
     }
     try {
       let hashPassword = await argon2.hash(password);
-      const query = await db
+      const query = await db()
         .createQueryBuilder()
         .insert()
         .into(User)
@@ -51,12 +50,10 @@ export const RegisterController = async (
       const success = new Success(200, "User created successfuly");
       return res.json(success.JSON);
     } catch (err) {
-      ConsoleDebug.error(err);
       const error = new HandleError(400, "Raw", "Error", null, err);
       return next(error);
     }
   } catch (err) {
-    ConsoleDebug.error(err);
     const error = new HandleError(400, "Raw", "Error", null, err);
     return next(error);
   }

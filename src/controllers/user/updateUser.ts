@@ -19,7 +19,7 @@ export const UpdateUserContrller = async (
       return next(error);
     }
 
-    const query = await db
+    const query = await db()
       .createQueryBuilder()
       .update(User)
       .set({
