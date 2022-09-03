@@ -1,11 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import { User } from "../../database/entities/user/user";
-import { db } from "../../database/config/ormconfig";
-import { HandleError } from "../../utils/response/errors/Error";
+import { NextFunction, Request, Response } from "express";
+
 import { ConsoleDebug } from "../../utils/console/console";
-import { v4 } from "uuid";
-import argon2 from "argon2";
+import { HandleError } from "../../utils/response/errors/Error";
 import Success from "../../utils/response/success";
+import { User } from "../../database/entities/user/user";
+import argon2 from "argon2";
+import { db } from "../../database/config/ormconfig";
+import { v4 } from "uuid";
 
 export const RegisterController = async (
   req: Request,
@@ -34,6 +35,7 @@ export const RegisterController = async (
           email,
           username,
           password: hashPassword,
+          api_key: v4(),
         })
         .returning("*")
         .execute();

@@ -1,9 +1,10 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
+
+import { ConsoleDebug } from "../../utils/console/console";
+import HandleError from "../../utils/response/errors";
+import Success from "../../utils/response/success";
 import { User } from "../../database/entities/user/user";
 import argon2 from "argon2";
-import HandleError from "../../utils/response/errors";
-import { ConsoleDebug } from "../../utils/console/console";
-import Success from "../../utils/response/success";
 
 export const LoginController = async (
   req: Request,
@@ -43,7 +44,7 @@ export const LoginController = async (
     }
 
     try {
-      const success = new Success(200, `Logged in successfuly`);
+      const success = new Success(200, `Logged in successfuly`, user);
       req.session.userId = user.id;
       return res.json(success.JSON);
     } catch (err) {
