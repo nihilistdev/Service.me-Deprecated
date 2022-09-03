@@ -5,53 +5,36 @@ import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
 import { db } from "../../database/config/ormconfig";
 
-export const UpdateCustomerController = async (
+export const DeleteCustomer = async (
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
 ) => {
   const id = parseInt(req.params.id);
-  const {
-    first_name,
-    last_name,
-    email,
-    pin,
-    phone,
-  }: { [key: string]: string } = req.body;
 
   try {
     const customer = await Customers.findOne({ where: { id } });
+
     if (!customer) {
       return next(new HandleError(400, "Raw", "There is no user by this id"));
     }
 
     const query = await db
-      .createQueryBuilder()
-      .update(Customers)
-      .set({
-        first_name,
-        last_name,
-        email,
-        phone,
-        pin: parseInt(pin),
-      })
-      .where("id = :id", { id })
-      .returning("*")
+      .createQueryBuilder(Customers, "c")
+      .softDelete()
       .execute();
-    console.log(query);
-    if (!query.raw[0]) {
+
+    if (!query)
       return next(
         new HandleError(
           400,
           "Raw",
-          "There was an error while updating customer"
+          "There was an error while deleting customer"
         )
       );
-    }
-    return res.json(
-      new Success(200, "Customer updated successfully", query.raw[0]).JSON
-    );
+
+    return next(new Success(200, "Customer deleted successfully").JSON);
   } catch (err) {
-    return next(new HandleError(400, "Raw", "There was an error", err));
+    return next(new HandleError(400, err.field, err.message));
   }
 };

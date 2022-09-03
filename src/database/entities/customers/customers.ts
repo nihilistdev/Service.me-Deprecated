@@ -1,10 +1,11 @@
 import {
-  Column,
   BaseEntity,
-  PrimaryGeneratedColumn,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  DeleteDateColumn,
   Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 
 @Entity()
@@ -13,7 +14,7 @@ export class Customers extends BaseEntity {
   id!: number;
 
   @Column()
-  name!: string;
+  first_name!: string;
 
   @Column()
   last_name!: string;
@@ -30,6 +31,12 @@ export class Customers extends BaseEntity {
   @CreateDateColumn()
   created_at: Date;
 
+  @DeleteDateColumn()
+  deleted_date: Date;
+
   @UpdateDateColumn()
   updated_at: Date;
+
+  @Column("tsvector", { select: false, nullable: true })
+  document_with_weights: any;
 }
