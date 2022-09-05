@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
+
 import { Customers } from "../../database/entities/customers/customers";
-import { db } from "../../database/config/ormconfig";
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
+import { db } from "../../database/config/ormconfig";
 
 export const CreateCustomerController = async (
   req: Request,
@@ -18,7 +19,7 @@ export const CreateCustomerController = async (
       .insert()
       .into(Customers)
       .values({
-        name: name,
+        first_name: name,
         last_name: last_name,
         email: email,
         pin: parseInt(pin),
@@ -39,6 +40,6 @@ export const CreateCustomerController = async (
       new Success(200, "Customer creation success", query.raw[0]).JSON
     );
   } catch (err) {
-    return next(new HandleError(400, "Raw", "Error", null, err));
+    return next(new HandleError(400, err.field, err.message));
   }
 };

@@ -1,23 +1,22 @@
 import "dotenv/config";
 import "reflect-metadata";
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import fs from "fs";
-import path from "path";
-import morgan from "morgan";
-import ConsoleDebug from "./utils/console";
-import routes from "./routes";
-import connectRedis from "connect-redis";
-import session from "express-session";
-import Redis from "ioredis";
-import csurf from "csurf";
-import cookieParser from "cookie-parser";
-import { isProd } from "./utils/isProd/isProd";
+
 import { COOKIE_NAME } from "./utils/constants/constants";
+import ConsoleDebug from "./utils/console";
+import Redis from "ioredis";
 import { RedisContext } from "./context/Redis";
-import { errorHandle } from "./middleware/handleError";
+import { __prod__ } from "./utils";
 import { connDb } from "./database/createConnection";
+import connectRedis from "connect-redis";
+import cors from "cors";
+import { errorHandle } from "./middleware/handleError";
+import express from "express";
+import fs from "fs";
+import helmet from "helmet";
+import morgan from "morgan";
+import path from "path";
+import routes from "./routes";
+import session from "express-session";
 
 export const app = express();
 const RedisStore = connectRedis(session);
@@ -27,15 +26,6 @@ app.use(cors());
 app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cookieParser());
-app.use(
-  csurf({
-    cookie: {
-      httpOnly: true,
-      sameSite: "lax",
-    },
-  })
-);
 app.use(
   session({
     name: COOKIE_NAME,
@@ -48,7 +38,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
       httpOnly: true,
       sameSite: "lax",
-      secure: !!isProd(),
+      secure: !!__prod__,
     },
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
