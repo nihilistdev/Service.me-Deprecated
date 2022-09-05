@@ -10,7 +10,7 @@ export const FilterCustomer = async (
   _: Response,
   next: NextFunction
 ) => {
-  const { text } = req.body;
+  const { text }: { [key: string]: string } = req.body;
 
   try {
     const query = await db
