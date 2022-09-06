@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import { User } from "../../database/entities/user/user";
-import { db } from "../../database/config/ormconfig";
+import { NextFunction, Request, Response } from "express";
+
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
+import { User } from "../../database/entities/user/user";
+import { db } from "../../database/config/ormconfig";
 
 export const UpdateUserContrller = async (
   req: Request,
@@ -19,7 +20,7 @@ export const UpdateUserContrller = async (
       return next(error);
     }
 
-    const query = await db()
+    const query = await db
       .createQueryBuilder()
       .update(User)
       .set({

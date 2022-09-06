@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ConsoleDebug } from "../../utils/console/console";
 import { HandleError } from "../../utils/response/errors/Error";
 import Success from "../../utils/response/success";
 import { User } from "../../database/entities/user/user";
@@ -25,7 +24,7 @@ export const RegisterController = async (
     }
     try {
       let hashPassword = await argon2.hash(password);
-      const query = await db()
+      const query = await db
         .createQueryBuilder()
         .insert()
         .into(User)

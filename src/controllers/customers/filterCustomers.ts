@@ -11,7 +11,8 @@ export const FilterCustomer = async (
   next: NextFunction
 ) => {
   const { text }: { [key: string]: string } = req.body;
-
+  if (text.length === 0)
+    return next(new Success<Customers>(200, "Query success", {} as Customers));
   try {
     const query = await db
       .createQueryBuilder(Customers, "c")
