@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Customers } from "../../database/entities/customers/customers";
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
-import { db } from "../../database/config/ormconfig";
+import { getConnection } from "typeorm";
 
 export const DeleteCustomer = async (
   req: Request,
@@ -19,7 +19,7 @@ export const DeleteCustomer = async (
       return next(new HandleError(400, "Raw", "There is no user by this id"));
     }
 
-    const query = await db
+    const query = await getConnection()
       .createQueryBuilder(Customers, "c")
       .softDelete()
       .execute();

@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Customers } from "../../database/entities/customers/customers";
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
-import { db } from "../../database/config/ormconfig";
+import { getConnection } from "typeorm";
 
 export const CreateCustomerController = async (
   req: Request,
@@ -14,7 +14,7 @@ export const CreateCustomerController = async (
     req.body;
 
   try {
-    const query = await db
+    const query = await getConnection()
       .createQueryBuilder()
       .insert()
       .into(Customers)

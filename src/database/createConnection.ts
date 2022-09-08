@@ -1,13 +1,16 @@
-import ConsoleDebug from "../utils/console";
-import { DataSource } from "typeorm";
+import { Connection, createConnection, getConnectionManager } from "typeorm";
+
 import { db } from "./config/ormconfig";
 
-export const connDb = async (): Promise<DataSource | undefined> => {
-  await db.initialize();
-
-  if (!db.isInitialized) {
-    ConsoleDebug.error("There was an error while conecting to database");
-    return undefined;
+export const createDbConnection = async (): Promise<Connection | null> => {
+  try {
+    await createConnection(db);
+  } catch (err) {
+    if (err.name === "AlreadyHasActiveConnectionError") {
+      const activeConnection = getConnectionManager().get(db.name);
+      return activeConnection;
+    }
+    console.log(err);
   }
-  return db;
+  return null;
 };

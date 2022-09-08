@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Customers } from "../../database/entities/customers/customers";
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
-import { db } from "../../database/config/ormconfig";
+import { getConnection } from "typeorm";
 
 export const ShowCustomers = async (
   req: Request,
@@ -42,7 +42,7 @@ export const ShowCustomers = async (
       };
     }
     try {
-      data.results = await db
+      data.results = await getConnection()
         .createQueryBuilder(Customers, "c")
         .skip(startIndex)
         .limit(limit)

@@ -4,7 +4,7 @@ import { HandleError } from "../../utils/response/errors/Error";
 import Success from "../../utils/response/success";
 import { User } from "../../database/entities/user/user";
 import argon2 from "argon2";
-import { db } from "../../database/config/ormconfig";
+import { getConnection } from "typeorm";
 import { v4 } from "uuid";
 
 export const RegisterController = async (
@@ -24,7 +24,7 @@ export const RegisterController = async (
     }
     try {
       let hashPassword = await argon2.hash(password);
-      const query = await db
+      const query = await getConnection()
         .createQueryBuilder()
         .insert()
         .into(User)
@@ -49,14 +49,14 @@ export const RegisterController = async (
       }
       const token = v4();
       await req.redis.setKey(token, query.raw[0].id, "Verify-Account");
-      const success = new Success(200, "User created successfuly");
+      const success = new Success<User>(200, "User created successfuly");
       return res.json(success.JSON);
     } catch (err) {
-      const error = new HandleError(400, "Raw", "Error", null, err);
+      const error = new HandleError(400, err.field, err.message, null, err);
       return next(error);
     }
   } catch (err) {
-    const error = new HandleError(400, "Raw", "Error", null, err);
+    const error = new HandleError(400, err.field, err.message, null, err);
     return next(error);
   }
 };

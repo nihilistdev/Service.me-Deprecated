@@ -1,10 +1,10 @@
-import { DataSource } from "typeorm";
-import { app } from "../../src";
+import { Connection } from "typeorm";
+import app from "../../src/server";
 import { faker } from "@faker-js/faker";
 import { agent as request } from "supertest";
 import { testConn } from "../../src/utils/testing/testConn";
 
-let connection: DataSource;
+let connection: Connection;
 
 const data = {
   name: faker.name.firstName(),
@@ -16,40 +16,47 @@ const data = {
 };
 
 beforeAll(async () => {
-  connection = await testConn().initialize();
+  connection = await testConn();
 });
 
 afterAll(async () => {
-  await connection.destroy();
+  await connection.close();
 });
 
 describe("POST /register", () => {
-  test("Should fail because passwords don't match", (done) => {
-    request(app)
+  test("Should fail because passwords don't match", async () => {
+    const response = await request(app)
       .post("/v1/auth/register")
       .send(data)
-      .expect(403)
-      .then((response) => {
-        expect(typeof response.body.errorType).toBe("string");
-        expect(response.body.errors).toBeNull();
-        done();
-      });
-    done();
+      .expect(403);
+    expect(typeof response.body.errorType).toBe("string");
+    expect(response.body.errors).toBeNull();
   });
 
-  test("Sholud fail becasue email is not correct", (done) => {
+  test("Sholud fail becasue email is not correct", async () => {
     data.password = faker.internet.password();
     data.confirmPassword = data.password;
     data.email = "email";
-    request(app)
-      .post("/v1/auth/register")
-      .send(data)
-      .then((response) => {
-        expect(response.status).toBe(403);
-        expect(typeof response.body.errorType).toBe("string");
-        expect(response.body.errors).toBeNull();
-        done();
-      });
-    done();
+    const response = await request(app).post("/v1/auth/register").send(data);
+    expect(response.status).toBe(403);
+    expect(typeof response.body.errorType).toBe("string");
+    expect(response.body.errors).toBeNull();
+  });
+
+  test("Should fail username is not provided", async () => {
+    data.email = faker.internet.email();
+    data.username = "";
+    const response = await request(app).post("/v1/auth/register").send(data);
+
+    expect(response.status).toBe(403);
+    expect(typeof response.body.errorType).toBe("string");
+    expect(response.body.errors).toBeNull();
+  });
+
+  test("Should pass", async () => {
+    data.username = faker.internet.userName();
+    const response = await request(app).post("/v1/auth/register").send(data);
+    expect(response.status).toBe(200);
+    expect(typeof response.body.message).toBe("string");
   });
 });

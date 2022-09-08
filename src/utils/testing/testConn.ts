@@ -1,8 +1,10 @@
-import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import { User } from "../../database/entities/user/user";
+import { createConnection } from "typeorm";
 
 export const testConn = (drop: boolean = false) =>
-  new DataSource({
+  createConnection({
+    name: "default",
     type: "postgres",
     host: "localhost",
     port: 5432,
@@ -11,7 +13,6 @@ export const testConn = (drop: boolean = false) =>
     database: "serviceme_test",
     synchronize: drop,
     dropSchema: drop,
-    entities: ["dist/database/entities/**/*.js"],
-    migrations: ["dist/database/migrations/*.js"],
+    entities: [User],
     namingStrategy: new SnakeNamingStrategy(),
   });

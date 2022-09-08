@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { Customers } from "../../database/entities/customers/customers";
 import { HandleError } from "../../utils/response/errors/Error";
 import { Success } from "../../utils/response/success/Success";
-import { db } from "../../database/config/ormconfig";
+import { getConnection } from "typeorm";
 
 export const FilterCustomer = async (
   req: Request,
@@ -14,7 +14,7 @@ export const FilterCustomer = async (
   if (text.length === 0)
     return next(new Success<Customers>(200, "Query success", {} as Customers));
   try {
-    const query = await db
+    const query = await getConnection()
       .createQueryBuilder(Customers, "c")
       .select()
       .where(`document_with_weights @@ to_tsquery(concat(:query::text,':*'))`, {
