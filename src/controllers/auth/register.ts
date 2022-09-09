@@ -49,7 +49,9 @@ export const RegisterController = async (
       }
       const token = v4();
       await req.redis.setKey(token, query.raw[0].id, "Verify-Account");
-      const success = new Success<User>(200, "User created successfuly");
+      const success = new Success(200, "User created successfuly", {
+        token: token,
+      });
       return res.json(success.JSON);
     } catch (err) {
       const error = new HandleError(400, err.field, err.message, null, err);

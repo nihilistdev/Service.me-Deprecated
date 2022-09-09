@@ -1,9 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import { User } from "../../database/entities/user/user";
-import { v4 } from "uuid";
+import { NextFunction, Request, Response } from "express";
+
+import ConsoleDebug from "../../utils/console";
 import HandleError from "../../utils/response/errors";
 import Success from "../../utils/response/success";
-import ConsoleDebug from "../../utils/console";
+import { User } from "../../database/entities/user/user";
+import { v4 } from "uuid";
 
 export const forgotPassword = async (
   req: Request,
@@ -24,7 +25,9 @@ export const forgotPassword = async (
     }
     const token = v4();
     req.redis.setKey(token, user.id, "Forgot-password");
-    const success = new Success(200, "Your verification email has been sent");
+    const success = new Success(200, "Your verification email has been sent", {
+      token: token,
+    });
     ConsoleDebug.info(`Generated token is ${token}`);
     return res.json(success.JSON);
   } catch (err) {

@@ -2,7 +2,6 @@ import "dotenv/config";
 import "reflect-metadata";
 
 import { COOKIE_NAME } from "./utils/constants/constants";
-import ConsoleDebug from "./utils/console";
 import Redis from "ioredis";
 import { RedisContext } from "./context/Redis";
 import { __prod__ } from "./utils";
@@ -55,7 +54,7 @@ try {
   );
   app.use(morgan("combined", { stream: accessLogStream }));
 } catch (err) {
-  ConsoleDebug.error(err);
+  console.error(err);
 }
 
 app.use("/", routes);

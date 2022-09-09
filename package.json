@@ -13,7 +13,8 @@
     "run:migrations": "typeorm-ts-node-commonjs migration:run -d ./src/database/config/ormconfig.ts",
     "format": "prettier . --write",
     "setup:db": "ts-node ./src/utils/testing/setup.ts",
-    "test": "npm run setup:db && jest --detectOpenHandles"
+    "test": "npm run setup:db && jest --detectOpenHandles",
+    "start:coverage": "npm run setup:db && node --experimental-vm-modules node_modules/.bin/jest --coverage"
   },
   "keywords": [
     "service"
