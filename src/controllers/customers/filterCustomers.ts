@@ -25,7 +25,7 @@ export const FilterCustomer = async (
         "DESC"
       )
       .getMany();
-    return next(new Success<Customers>(200, "Query success", query));
+    return _.json(new Success<Customers>(200, "Query success", query).JSON);
   } catch (err) {
     return next(new HandleError(400, err.field, err.message));
   }

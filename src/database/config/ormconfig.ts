@@ -15,3 +15,5 @@ export const db: ConnectionOptions = {
   migrations: ["dist/database/migrations/*.js"],
   namingStrategy: new SnakeNamingStrategy(),
 };
+
+// module.exports = db;

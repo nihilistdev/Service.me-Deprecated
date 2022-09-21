@@ -22,6 +22,6 @@ router.post(
 );
 router.delete("/delete/:id", [isAuth, isApiKeyGiven], DeleteCustomer);
 router.get("/all", [isAuth, isApiKeyGiven], ShowCustomers);
-router.get("/filter", [isAuth, isApiKeyGiven], FilterCustomer);
+router.post("/filter", [isAuth, isApiKeyGiven], FilterCustomer);
 
 export default router;

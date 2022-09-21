@@ -33,7 +33,7 @@ export const DeleteCustomer = async (
         )
       );
 
-    return next(new Success(200, "Customer deleted successfully").JSON);
+    return _.json(new Success(200, "Customer deleted successfully").JSON);
   } catch (err) {
     return next(new HandleError(400, err.field, err.message));
   }

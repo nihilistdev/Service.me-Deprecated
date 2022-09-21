@@ -50,7 +50,7 @@ export const ShowCustomers = async (
     } catch (err) {
       return next(new HandleError(400, err.field, err.message));
     }
-    return next(new Success<typeof data>(200, "Customers", data));
+    return _.json(new Success<typeof data>(200, "Customers", data).JSON);
   } catch (err) {
     return next(new HandleError(400, err.field, err.message));
   }

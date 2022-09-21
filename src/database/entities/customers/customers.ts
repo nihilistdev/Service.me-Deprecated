@@ -4,9 +4,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
 
 @Entity()
 export class Customers extends BaseEntity {
@@ -22,7 +24,7 @@ export class Customers extends BaseEntity {
   @Column()
   email: string;
 
-  @Column({ unique: true, type: "bigint" })
+  @Column({ nullable: true, unique: true, type: "bigint" })
   pin!: number;
 
   @Column()
@@ -39,4 +41,10 @@ export class Customers extends BaseEntity {
 
   @Column("tsvector", { select: false, nullable: true })
   document_with_weights: any;
+
+  @OneToMany(
+    () => CustomersInServiceCenter,
+    (serviceCenter) => serviceCenter.customers_id
+  )
+  ServiceCenter: CustomersInServiceCenter[];
 }

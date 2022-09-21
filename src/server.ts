@@ -39,7 +39,7 @@ app.use(
       secure: !!__prod__,
     },
     saveUninitialized: false,
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET as string,
     resave: false,
   })
 );
