@@ -2,10 +2,12 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
+import { User } from "../user/user";
 
 @Entity()
 export class ServiceCenter extends BaseEntity {
@@ -30,9 +32,15 @@ export class ServiceCenter extends BaseEntity {
   @Column({ nullable: true })
   id_number: string;
 
+  @Column({ nullable: true })
+  owner_id: number;
+
   @OneToMany(
     () => CustomersInServiceCenter,
     (customer) => customer.service_centers_sc_id
   )
   customers: CustomersInServiceCenter[];
+
+  @ManyToOne(() => User, (user) => user.id)
+  owner: User;
 }

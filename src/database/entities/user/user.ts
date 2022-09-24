@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { ServiceCenter } from "../service_center/ServiceCenter";
 
 @Entity()
 export class User extends BaseEntity {
@@ -38,6 +40,9 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => ServiceCenter, (ServiceCenter) => ServiceCenter.sc_id)
+  ownerOf: ServiceCenter[];
 
   @Column()
   api_key: string;
