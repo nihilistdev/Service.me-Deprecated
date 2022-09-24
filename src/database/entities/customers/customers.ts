@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
+import { CustomersInServiceCenter } from "src/database/entities/customers_in_service_center/CustomersInServiceCenter";
 
 @Entity()
 export class Customers extends BaseEntity {

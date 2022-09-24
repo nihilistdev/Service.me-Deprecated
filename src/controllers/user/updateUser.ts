@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-import HandleError from "../../utils/response/errors";
-import Success from "../../utils/response/success";
-import { User } from "../../database/entities/user/user";
+import HandleError from "src/utils/response/errors";
+import Success from "src/utils/response/success";
+import { User } from "src/database/entities/user/user";
 import { getConnection } from "typeorm";
 
 export const UpdateUserContrller = async (

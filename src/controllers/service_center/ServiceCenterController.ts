@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { ServiceCenter } from "../../database/entities/service_center/ServiceCenter";
-import HandleError from "../../utils/response/errors";
+import { ServiceCenter } from "src/database/entities/service_center/ServiceCenter";
+import HandleError from "src/utils/response/errors";
 import { getConnection } from "typeorm";
-import { Success } from "../../utils/response/success/Success";
+import { Success } from "src/utils/response/success/Success";
 
 export class ServiceCenterController {
   constructor() {}
 
   async update(req: Request, res: Response, next: NextFunction) {
-    
     const { name, address, city, phone, id_number } = req.body;
     const id = req.params.id;
     try {

@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
+import { CustomersInServiceCenter } from "src/database/entities/customers_in_service_center/CustomersInServiceCenter";
 import { User } from "../user/user";
 
 @Entity()
