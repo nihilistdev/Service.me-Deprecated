@@ -1,5 +1,5 @@
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { User } from "../../database/entities/user/user";
+import { User } from "src/database/entities/user/user";
 import { createConnection } from "typeorm";
 
 export const testConn = (drop: boolean = false) =>

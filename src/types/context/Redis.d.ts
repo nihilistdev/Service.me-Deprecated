@@ -1,7 +1,7 @@
 import {
   FORGOT_PASSWORD_PREFIX,
   ACCOUNT_VERIFICATION_PREFIX,
-} from "../../utils/constants/constants";
+} from "src/utils/constants/constants";
 export declare global {
   export interface RedisContextTypes {
     getKey(key: string): Promise<string | null>;
