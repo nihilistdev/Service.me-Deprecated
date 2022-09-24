@@ -3,7 +3,7 @@ import Customer from "./CustomerRoutes";
 import { Router } from "express";
 import UserRoute from "./UserRoute";
 import ServiceCenterRoute from "./ServiceCenterRoute";
-import { __prod__ } from "../../utils";
+import { __prod__ } from "src/utils";
 
 const router = Router();
 

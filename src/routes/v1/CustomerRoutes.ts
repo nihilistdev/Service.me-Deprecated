@@ -1,12 +1,12 @@
-import { CreateCustomerController } from "../../controllers/customers";
-import { DeleteCustomer } from "../../controllers/customers";
-import { FilterCustomer } from "../../controllers/customers";
+import { CreateCustomerController } from "src/controllers/customers";
+import { DeleteCustomer } from "src/controllers/customers";
+import { FilterCustomer } from "src/controllers/customers";
 import { Router } from "express";
-import { ShowCustomers } from "../../controllers/customers";
-import { UpdateCustomerController } from "../../controllers/customers";
-import { ValidateCreateCustomer } from "../../middleware/validation/customer";
-import { isApiKeyGiven } from "../../middleware/isApiKeyGiven";
-import { isAuth } from "../../middleware/isAuth";
+import { ShowCustomers } from "src/controllers/customers";
+import { UpdateCustomerController } from "src/controllers/customers";
+import { ValidateCreateCustomer } from "src/middleware/validation/customer";
+import { isApiKeyGiven } from "src/middleware/isApiKeyGiven";
+import { isAuth } from "src/middleware/isAuth";
 
 const router = Router();
 
