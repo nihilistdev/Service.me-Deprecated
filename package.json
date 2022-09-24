@@ -2,7 +2,7 @@
   "name": "service.me",
   "description": "Simple service provider app to maintain your work",
   "version": "1.0.0",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "compile": "tsc",
     "start:watch": "tsc -w",
@@ -19,6 +19,9 @@
   "keywords": [
     "service"
   ],
+  "_moduleAliases":{
+    "src":"dist/"
+  },
   "author": "Filip Ivanusec",
   "license": "ISC",
   "dependencies": {
@@ -30,6 +33,7 @@
     "express-session": "^1.17.2",
     "helmet": "^5.0.2",
     "ioredis": "^4.28.5",
+    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",

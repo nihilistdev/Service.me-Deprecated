@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
-import { ACCOUNT_VERIFICATION_PREFIX } from "../../utils/constants/constants";
-import HandleErorr from "../../utils/response/errors";
-import Success from "../../utils/response/success";
-import { User } from "../../database/entities/user/user";
+import { ACCOUNT_VERIFICATION_PREFIX } from "src/utils/constants/constants";
+import HandleErorr from "src/utils/response/errors";
+import Success from "src/utils/response/success";
+import { User } from "src/database/entities/user/user";
 
 export const verifyAccount = async (
   req: Request,

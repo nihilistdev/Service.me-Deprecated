@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import {
   FORGOT_PASSWORD_PREFIX,
   ACCOUNT_VERIFICATION_PREFIX,
-} from "../utils/constants/constants";
+} from "src/utils/constants/constants";
 
 export class RedisContext implements RedisContextTypes {
   constructor(private redis: Redis) {}

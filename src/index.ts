@@ -1,3 +1,4 @@
+import "module-alias/register"
 import app from "./server";
 import { createDbConnection } from "./database/createConnection";
 

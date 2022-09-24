@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { User } from "../../database/entities/user/user";
-import { FORGOT_PASSWORD_PREFIX } from "../../utils/constants/constants";
+import { User } from "src/database/entities/user/user";
+import { FORGOT_PASSWORD_PREFIX } from "src/utils/constants/constants";
 import argon2 from "argon2";
-import HandleError from "../../utils/response/errors";
-import Success from "../../utils/response/success";
-import ConsoleDebug from "../../utils/console";
+import HandleError from "src/utils/response/errors";
+import Success from "src/utils/response/success";
+import ConsoleDebug from "src/utils/console";
 
 export const changePasswordNonJwtToken = async (
   req: Request,

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-import { HandleError } from "../../utils/response/errors/Error";
-import Success from "../../utils/response/success";
-import { User } from "../../database/entities/user/user";
+import { HandleError } from "src/utils/response/errors/Error";
+import Success from "src/utils/response/success";
+import { User } from "src/database/entities/user/user";
 import argon2 from "argon2";
 import { getConnection } from "typeorm";
 import { v4 } from "uuid";
