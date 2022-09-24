@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import HandleError from "../../../utils/response/errors";
+import HandleError from "src/utils/response/errors";
 import validator from "validator";
 
 export const CreateServiceCenter = (

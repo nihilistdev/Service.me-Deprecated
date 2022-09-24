@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import validator from "validator";
 
-import { HandleError } from "../../../utils/response/errors/Error";
+import { HandleError } from "src/utils/response/errors/Error";
 
 export const validateChangePassword = (
   req: Request,

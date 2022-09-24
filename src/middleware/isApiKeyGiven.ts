@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import HandleError from "../utils/response/errors";
+import HandleError from "src/utils/response/errors";
 
 export const isApiKeyGiven = (
   req: Request,
