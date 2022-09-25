@@ -1,12 +1,15 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
-import { CustomersInServiceCenter } from "src/database/entities/customers_in_service_center/CustomersInServiceCenter";
+import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
 import { User } from "../user/user";
 
 @Entity()
@@ -43,4 +46,13 @@ export class ServiceCenter extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.id)
   owner: User;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  update_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at?: Date;
 }

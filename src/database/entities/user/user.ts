@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { ServiceCenter } from "src/database/entities/service_center/ServiceCenter";
+import { ServiceCenter } from "../service_center/ServiceCenter";
 
 @Entity()
 export class User extends BaseEntity {
