@@ -44,5 +44,5 @@
     }
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts", "src/types"]
+  "include": ["./src/**/*.ts", "src/types", "test"]
 }

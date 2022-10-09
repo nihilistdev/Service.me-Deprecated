@@ -11,6 +11,12 @@ export const UpdateUserContrller = async (
   next: NextFunction
 ) => {
   const id = parseInt(req.params.id);
+
+  if (req.session.userId !== id)
+    return next(
+      new HandleError(403, "Unauthorized", "This user is not reachable!")
+    );
+
   let { name, last_name, email, username } = req.body;
 
   try {

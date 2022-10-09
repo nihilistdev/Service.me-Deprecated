@@ -6,3 +6,4 @@ log/
 migrations/
 coverage/
 .DS_Store
+yarn-error.log
