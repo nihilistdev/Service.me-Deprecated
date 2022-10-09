@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { UpdateServiceCenter } from "src/middleware/validation/service_center/UpdateServiceCenter";
-import { ServiceCenterController } from "src/controllers/service_center";
-import { isAuth } from "src/middleware/isAuth";
-import { CreateServiceCenter } from "src/middleware/validation/service_center/CreateServiceCenter";
+import { UpdateServiceCenter } from "@middleware/validation/service_center/UpdateServiceCenter";
+import { ServiceCenterController } from "@controllers/service_center";
+import { isAuth } from "@middleware/isAuth";
+import { CreateServiceCenter } from "@middleware/validation/service_center/CreateServiceCenter";
 
 const router = Router();
 const controller = new ServiceCenterController();

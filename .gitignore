@@ -5,3 +5,4 @@ log/
 .vscode/
 migrations/
 coverage/
+.DS_Store

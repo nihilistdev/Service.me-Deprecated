@@ -1,6 +1,6 @@
 import { ConnectionOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { __prod__ } from "../../utils";
+import { __prod__ } from "@utils/constants/constants";
 
 export const db: ConnectionOptions = {
   name: "default",
@@ -11,8 +11,8 @@ export const db: ConnectionOptions = {
   password: "postgres",
   database: "serviceme",
   logging: !__prod__,
-  entities: ["dist/database/entities/**/*.js"],
-  migrations: ["dist/database/migrations/*.js"],
+  entities: ["src/database/entities/**/*.ts"],
+  migrations: ["src/database/migrations/*.ts"],
   namingStrategy: new SnakeNamingStrategy(),
 };
 

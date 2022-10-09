@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { isAuth } from "src/middleware/isAuth";
+import { isAuth } from "@middleware/isAuth";
 
 // Controllers
-import { UpdateUserContrller } from "src/controllers/user";
+import { UpdateUserContrller } from "@controllers/user";
 
 // Validators
-import { updateUserValidator } from "src/middleware/validation/users";
+import { updateUserValidator } from "@middleware/validation/users";
 
 const router = Router();
 

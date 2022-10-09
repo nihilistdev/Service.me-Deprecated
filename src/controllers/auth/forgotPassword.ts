@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 
-import ConsoleDebug from "src/utils/console";
-import HandleError from "src/utils/response/errors";
-import Success from "src/utils/response/success";
-import { User } from "src/database/entities/user/user";
+import ConsoleDebug from "@utils/console";
+import HandleError from "@utils/response/errors";
+import Success from "@utils/response/success";
+import { User } from "@database/entities/user/user";
 import { v4 } from "uuid";
 
 export const forgotPassword = async (

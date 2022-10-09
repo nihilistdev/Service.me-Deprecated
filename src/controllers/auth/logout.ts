@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { COOKIE_NAME } from "src/utils/constants/constants";
-import HandleError from "src/utils/response/errors";
-import Success from "src/utils/response/success";
+import { COOKIE_NAME } from "@utils/constants/constants";
+import HandleError from "@utils/response/errors";
+import Success from "@utils/response/success";
 
 export const logoutContoller = async (
   req: Request,

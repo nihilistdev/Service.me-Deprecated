@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Customers } from "../../database/entities/customers/customers";
-import { HandleError } from "../../utils/response/errors/Error";
-import { Success } from "../../utils/response/success/Success";
+import { Customers } from "@database/entities/customers/customers";
+import { HandleError } from "@utils/response/errors/Error";
+import { Success } from "@utils/response/success/Success";
 import { getConnection } from "typeorm";
 
 export const FilterCustomer = async (

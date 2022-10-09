@@ -1,19 +1,19 @@
 import "dotenv/config";
 import "reflect-metadata";
 
-import { COOKIE_NAME } from "src/utils/constants/constants";
+import { COOKIE_NAME, __prod__ } from "@utils/constants";
+
 import Redis from "ioredis";
-import { RedisContext } from "src/context/Redis";
-import { __prod__ } from "src/utils";
+import { RedisContext } from "@context/Redis";
 import connectRedis from "connect-redis";
 import cors from "cors";
-import { errorHandle } from "src/middleware/handleError";
+import { errorHandle } from "@middleware/handleError";
 import express from "express";
 import fs from "fs";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
-import routes from "src/routes";
+import routes from "@routes";
 import session from "express-session";
 
 const app = express();

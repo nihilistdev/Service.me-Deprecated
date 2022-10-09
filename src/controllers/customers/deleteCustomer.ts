@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-import { Customers } from "../../database/entities/customers/customers";
-import HandleError from "../../utils/response/errors";
-import Success from "../../utils/response/success";
+import { Customers } from "@database/entities/customers/customers";
+import HandleError from "@utils/response/errors";
+import Success from "@utils/response/success";
 import { getConnection } from "typeorm";
 
 export const DeleteCustomer = async (

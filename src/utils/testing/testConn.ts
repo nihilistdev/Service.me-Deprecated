@@ -1,5 +1,6 @@
+import "reflect-metadata";
+
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { User } from "src/database/entities/user/user";
 import { createConnection } from "typeorm";
 
 export const testConn = (drop: boolean = false) =>
@@ -13,6 +14,6 @@ export const testConn = (drop: boolean = false) =>
     database: "serviceme_test",
     synchronize: drop,
     dropSchema: drop,
-    entities: [User],
+    entities: ["src/database/entities/**/*.ts"],
     namingStrategy: new SnakeNamingStrategy(),
   });

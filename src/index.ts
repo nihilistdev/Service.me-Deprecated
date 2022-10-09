@@ -1,5 +1,6 @@
-import "module-alias/register"
-import app from "./server";
+import "tsconfig-paths/register";
+
+import app from "@root/server";
 import { createDbConnection } from "./database/createConnection";
 
 (async () => {

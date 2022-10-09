@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isAuth } from "src/middleware/isAuth";
+import { isAuth } from "@middleware/isAuth";
 
 // Controllers
 import {
@@ -9,7 +9,7 @@ import {
   forgotPassword,
   logoutContoller,
   verifyAccount,
-} from "../../controllers/auth";
+} from "@controllers/auth";
 
 // Validators
 import {
@@ -17,7 +17,7 @@ import {
   registerValidator,
   changePasswordNonJwtTokenValidator,
   forgotPasswordValidator,
-} from "../../middleware/validation/auth";
+} from "@middleware/validation/auth";
 
 const router = Router();
 

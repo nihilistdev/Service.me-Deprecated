@@ -6,7 +6,7 @@
   "scripts": {
     "compile": "tsc",
     "start:watch": "tsc -w",
-    "start:dev": "nodemon dist/index.js",
+    "start:dev": "nodemon -e ts --watch src src/index.ts",
     "gen:types-development": "npx gen-env-types config/.env.developmet -o src/types/env.d.ts",
     "gen:migrations": "typeorm migration:generate --config ./dist/database/config/ormconfig.js --dir ./src/database/migrations -n $1",
     "revert:migrations": "typeorm migration:revert",
@@ -19,8 +19,15 @@
   "keywords": [
     "service"
   ],
-  "_moduleAliases":{
-    "src":"dist/"
+  "_moduleAliases": {
+    "@root": "src/",
+    "@context": "src/context/",
+    "@controllers": "src/controllers/",
+    "@database": "src/database/",
+    "@middleware": "src/middleware/",
+    "@routes": "src/routes/",
+    "@types": "src/types/",
+    "@utils": "src/utils/"
   },
   "author": "Filip Ivanusec",
   "license": "ISC",
@@ -33,11 +40,14 @@
     "express-session": "^1.17.2",
     "helmet": "^5.0.2",
     "ioredis": "^4.28.5",
+    "jest-module-name-mapper": "^0.1.5",
     "module-alias": "^2.2.2",
+    "module-alias-jest": "^0.0.3",
     "morgan": "^1.10.0",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.45",
+    "tsconfig-paths": "^4.1.0",
+    "typeorm": "^0.2.38",
     "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^8.3.2",
     "validator": "^13.7.0"
@@ -52,7 +62,7 @@
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/express-session": "^1.17.4",
-    "@types/jest": "^29.0.0",
+    "@types/jest": "^29.1.2",
     "@types/morgan": "^1.9.3",
     "@types/node": "^17.0.24",
     "@types/supertest": "^2.0.12",

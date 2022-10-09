@@ -1,4 +1,11 @@
 {
+  "ts-node": {
+    "files": true,
+    "require": ["tsconfig-paths/register"],
+    "compilerOptions": {
+      "rootDir": "."
+    }
+  },
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
@@ -22,12 +29,20 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./node_modules/@types", "src/types"],
     "types": ["node", "jest"],
     "paths": {
-      "src/*":["./src/*"]
+      "@context/*": ["./src/context/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@database/*": ["./src/database/*"],
+      "@middleware/*": ["./src/middleware/*"],
+      "@routes/*": ["./src/routes/*"],
+      "@routes": ["./src/routes/index.ts"],
+      "@types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@root/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts", "src/types"]
 }

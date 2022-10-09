@@ -1,8 +1,8 @@
 import { Connection } from "typeorm";
-import app from "../../src/server";
+import app from "@root/server";
 import { faker } from "@faker-js/faker";
 import { agent as request } from "supertest";
-import { testConn } from "../../src/utils/testing/testConn";
+import { testConn } from "@utils/testing/testConn";
 
 let connection: Connection;
 let token: string;
