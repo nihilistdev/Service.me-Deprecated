@@ -1,27 +1,24 @@
-import { CreateCustomerController } from "@controllers/customers";
-import { DeleteCustomer } from "@controllers/customers";
-import { FilterCustomer } from "@controllers/customers";
 import { Router } from "express";
-import { ShowCustomers } from "@controllers/customers";
-import { UpdateCustomerController } from "@controllers/customers";
 import { ValidateCreateCustomer } from "@middleware/validation/customer";
 import { isApiKeyGiven } from "@middleware/isApiKeyGiven";
 import { isAuth } from "@middleware/isAuth";
+import { CustomerController } from "@controllers/customers/CustomerController";
 
 const router = Router();
+const customers = new CustomerController();
 
 router.post(
   "/create",
   [isAuth, isApiKeyGiven, ValidateCreateCustomer],
-  CreateCustomerController
+  customers.createCustomers.bind(customers)
 );
-router.post(
+router.put(
   "/update/:id",
   [isAuth, isApiKeyGiven, ValidateCreateCustomer],
-  UpdateCustomerController
+  customers.updateCustomers.bind(customers)
 );
-router.delete("/delete/:id", [isAuth, isApiKeyGiven], DeleteCustomer);
-router.get("/all", [isAuth, isApiKeyGiven], ShowCustomers);
-router.post("/filter", [isAuth, isApiKeyGiven], FilterCustomer);
+router.delete("/delete/:id", [isAuth, isApiKeyGiven], customers.deleteCustomer.bind(customers));
+router.post("/all", [isAuth, isApiKeyGiven], customers.listCustomers.bind(customers));
+router.post("/filter", [isAuth, isApiKeyGiven], customers.filterCustomer.bind(customers));
 
 export default router;

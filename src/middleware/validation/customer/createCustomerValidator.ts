@@ -8,9 +8,9 @@ export const ValidateCreateCustomer = (
   _: Response,
   next: NextFunction
 ) => {
-  let { name, last_name, email, pin, phone } = req.body;
+  let { first_name, last_name, email, pin, phone } = req.body;
 
-  name = !name ? "" : name;
+  first_name = !first_name ? "" : first_name;
   last_name = !last_name ? "" : last_name;
   email = !email ? "" : email;
   pin = !pin ? "" : pin;
@@ -18,8 +18,8 @@ export const ValidateCreateCustomer = (
 
   const errorValidator: ErrorValidation[] = [...new Array()];
 
-  if (validator.isEmpty(name))
-    errorValidator.push({ name: "Name is required" });
+  if (validator.isEmpty(first_name))
+    errorValidator.push({ first_name: "Name is required" });
   if (validator.isEmpty(last_name))
     errorValidator.push({ last_name: "Last name is required" });
   if (!validator.isEmail(email))

@@ -6,4 +6,5 @@ log/
 migrations/
 coverage/
 .DS_Store
+rest/
 yarn-error.log

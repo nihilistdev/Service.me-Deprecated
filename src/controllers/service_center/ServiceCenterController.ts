@@ -24,7 +24,7 @@ export class ServiceCenterController {
         .where("sc_id = :id", { id: parseInt(id) })
         .returning("*")
         .execute();
-      res.json(new Success<ServiceCenter>(200, "Update success"));
+      res.json(new Success(200, "Update success"));
     } catch (err) {
       return next(new HandleError(400, err.field, err.message));
     }
@@ -71,7 +71,7 @@ export class ServiceCenterController {
       } catch (err) {
         return next(new HandleError(400, err.field, err.message));
       }
-      return _.json(new Success<typeof data>(200, "Service center", data).JSON);
+      return _.json(new Success(200, "Service center", data).JSON);
     } catch (err) {
       return next(new HandleError(400, err.field, err.message));
     }
@@ -96,6 +96,6 @@ export class ServiceCenterController {
     } catch (err) {
       return next(new HandleError(400, err.field, err.message));
     }
-    res.json(new Success<ServiceCenter>(200, "Query success", response.raw[0]));
+    res.json(new Success(200, "Query success", response.raw[0]));
   }
 }

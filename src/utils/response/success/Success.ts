@@ -1,8 +1,8 @@
-export class Success<T> {
+export class Success {
   constructor(
     private httpStatusCode: number,
     private message?: string,
-    private data?: T | T[]
+    private data?: any
   ) {}
 
   get JSON() {
