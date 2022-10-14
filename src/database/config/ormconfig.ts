@@ -2,7 +2,7 @@ import { ConnectionOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { __prod__ } from "@utils/constants/constants";
 
-export const db: ConnectionOptions = {
+const db: ConnectionOptions = {
   name: "default",
   type: "postgres",
   host: process.env.PG_SOURCE,
@@ -16,4 +16,4 @@ export const db: ConnectionOptions = {
   namingStrategy: new SnakeNamingStrategy(),
 };
 
-// module.exports = db;
+export = db;

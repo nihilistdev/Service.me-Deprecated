@@ -6,6 +6,7 @@ import { User } from "@database/entities/user/user";
 import argon2 from "argon2";
 import { getConnection } from "typeorm";
 import { v4 } from "uuid";
+import { ApiKeys } from "@database/entities/api_keys/api_keys";
 
 export const RegisterController = async (
   req: Request,
@@ -34,7 +35,6 @@ export const RegisterController = async (
           email,
           username,
           password: hashPassword,
-          api_key: v4(),
         })
         .returning("*")
         .execute();
@@ -52,6 +52,7 @@ export const RegisterController = async (
       const success = new Success(200, "User created successfuly", {
         token: token,
       });
+      await ApiKeys.create({user_id: query.raw[0].id, key: v4()}).save();
       return res.json(success.JSON);
     } catch (err) {
       const error = new HandleError(400, err.field, err.message, null, err);

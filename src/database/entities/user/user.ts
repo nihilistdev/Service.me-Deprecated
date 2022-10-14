@@ -43,7 +43,4 @@ export class User extends BaseEntity {
 
   @OneToMany(() => ServiceCenter, (ServiceCenter) => ServiceCenter.sc_id)
   ownerOf: ServiceCenter[];
-
-  @Column()
-  api_key: string;
 }

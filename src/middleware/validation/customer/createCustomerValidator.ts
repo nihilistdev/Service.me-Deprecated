@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import validator from "validator";
-
 import HandleError from "@utils/response/errors";
+import { BaseValidator } from "@root/core/BaseValidator";
 
 export const ValidateCreateCustomer = (
   req: Request,
@@ -10,31 +9,23 @@ export const ValidateCreateCustomer = (
 ) => {
   let { first_name, last_name, email, pin, phone } = req.body;
 
-  first_name = !first_name ? "" : first_name;
-  last_name = !last_name ? "" : last_name;
-  email = !email ? "" : email;
-  pin = !pin ? "" : pin;
-  phone = !phone ? "" : phone;
+  const base = new BaseValidator([
+    { name: "first_name", value: first_name, required: true },
+    { name: "last_name", value: last_name, required: true },
+    { name: "email", value: email, required: true, email: true },
+    { name: "pin", value: parseInt(pin), required: true },
+    { name: "phone", value: phone, required: true },
+  ]).validate();
+  console.log(base);
 
-  const errorValidator: ErrorValidation[] = [...new Array()];
-
-  if (validator.isEmpty(first_name))
-    errorValidator.push({ first_name: "Name is required" });
-  if (validator.isEmpty(last_name))
-    errorValidator.push({ last_name: "Last name is required" });
-  if (!validator.isEmail(email))
-    errorValidator.push({ email: "Valid email must be provided" });
-  if (validator.isEmpty(phone))
-    errorValidator.push({ phone: "Phone is empty and required" });
-
-  if (errorValidator.length !== 0) {
+  if (base.length !== 0) {
     const error = new HandleError(
       400,
       "Validation",
       "Validation erorr",
       null,
       null,
-      errorValidator
+      base
     );
     return next(error);
   }

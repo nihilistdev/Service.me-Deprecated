@@ -53,8 +53,16 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
   }
 
   async create(
-    params?: ObjectLiteral | undefined
+    params?: ObjectLiteral | undefined,
+    options?: OptionsParams
   ): Promise<InsertResult | undefined> {
+    if (options?.checkIfAlreadyExists) this.checkIfExists(params || {});
+
+    if (options?.checkTypes) {
+      this.validateTypes(params || {});
+      throw new HandleError(400, "General", "User exists by given details");
+    }
+
     try {
       const query = await getRepository(this.repository)
         .createQueryBuilder()
@@ -80,7 +88,8 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
   async update(
     instance: any,
     params?: ObjectLiteral | undefined,
-    where?: Where
+    where?: Where,
+    parameters?: ObjectLiteral | undefined
   ): Promise<UpdateResult | undefined> {
     try {
       if (!instance) {
@@ -91,7 +100,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         .createQueryBuilder()
         .update()
         .set(params as ObjectLiteral)
-        .where(where ? where : "")
+        .where(where, parameters)
         .returning("*")
         .execute();
       if (!query.raw[0]) {
@@ -109,7 +118,6 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
 
   async filter(param?: string): Promise<T | T[]> {
     if (!param) return {} as T;
-
     try {
       const query = await getRepository(this.repository)
         .createQueryBuilder()
@@ -133,7 +141,6 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
 
   async delete(param?: ObjectLiteral): Promise<boolean> {
     if (!param) return false;
-
     try {
       const query = await getRepository(this.repository).softDelete(param);
       if (query) return true;
@@ -141,5 +148,32 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
       throw new HandleError(400, "Raw", err.message);
     }
     return false;
+  }
+
+  private async checkIfExists(params: ObjectLiteral) {
+    const query = await getRepository(this.repository).findOne({
+      where: { ...params },
+    });
+    if (query) {
+      return false;
+    }
+    return true;
+  }
+
+  private shallowEqual(object1: ObjectLiteral, object2: ObjectLiteral) {
+    delete object2.id;
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    for (let i = 0; i < keys1.length; i++) {
+      if (!keys1[i].includes(keys2[i])) return false;
+    }
+    return true;
+  }
+
+  private validateTypes(params: ObjectLiteral) {
+    const types = getRepository(this.repository).metadata.propertiesMap;
+    if (this.shallowEqual(params, types)) return;
+    throw new HandleError(400, "Validation", "Types are not matching");
   }
 }

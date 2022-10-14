@@ -7,8 +7,8 @@ import { CreateServiceCenter } from "@middleware/validation/service_center/Creat
 const router = Router();
 const controller = new ServiceCenterController();
 
-router.post("/create", [isAuth, CreateServiceCenter], controller.insert);
-router.put("/update/:id", [isAuth, UpdateServiceCenter], controller.update);
-router.get("/list", [isAuth], controller.list);
+router.post("/create", [isAuth, CreateServiceCenter], controller.insert.bind(controller));
+router.put("/update/:id", [isAuth, UpdateServiceCenter], controller.update.bind(controller));
+router.get("/list", [isAuth], controller.list.bind(controller));
 
 export default router;

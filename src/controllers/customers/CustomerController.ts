@@ -45,13 +45,19 @@ export class CustomerController {
     }: { [key: string]: string } = req.body;
 
     try {
-      const query = await this.base.create({
-        first_name,
-        last_name,
-        email,
-        pin,
-        phone,
-      });
+      const query = await this.base.create(
+        {
+          first_name,
+          last_name,
+          email,
+          pin,
+          phone,
+        },
+        {
+          checkIfAlreadyExists: true,
+          checkTypes: true,
+        }
+      );
       res.json(new Success(200, "Query success", query!.raw[0]));
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));

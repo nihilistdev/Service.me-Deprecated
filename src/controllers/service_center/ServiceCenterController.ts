@@ -1,101 +1,67 @@
 import { NextFunction, Request, Response } from "express";
 import { ServiceCenter } from "@database/entities/service_center/ServiceCenter";
 import HandleError from "@utils/response/errors";
-import { getConnection } from "typeorm";
 import { Success } from "@utils/response/success/Success";
+import BaseController from "@root/core/BaseController";
 
 export class ServiceCenterController {
-  constructor() {}
+  constructor(private base = new BaseController(ServiceCenter)) {}
 
   async update(req: Request, res: Response, next: NextFunction) {
     const { name, address, city, phone, id_number } = req.body;
     const id = req.params.id;
     try {
-      await getConnection()
-        .createQueryBuilder()
-        .update(ServiceCenter)
-        .set({
+      const instance = await ServiceCenter.findOne({
+        where: { sc_id: parseInt(id, 10) },
+      });
+      const query = await this.base.update(
+        instance,
+        {
           name,
           address,
           city,
           phone,
           id_number,
-        })
-        .where("sc_id = :id", { id: parseInt(id) })
-        .returning("*")
-        .execute();
-      res.json(new Success(200, "Update success"));
+        },
+        "id = :id",
+        { id: parseInt(id, 10) }
+      );
+      if (query!.raw[0]) res.json(new Success(200, "Update success"));
     } catch (err) {
       return next(new HandleError(400, err.field, err.message));
     }
   }
 
-  async list(req: Request, _: Response, next: NextFunction) {
+  async list(req: Request, res: Response, next: NextFunction) {
+    const page = parseInt(req.query["page"] as string, 10);
+    const limit = parseInt(req.query["limit"] as string, 10);
     try {
-      const page = parseInt(req.query["page"] as string);
-      const limit = parseInt(req.query["limit"] as string);
-
-      const startIndex = (page - 1) * limit;
-      const endIndex = page * limit;
-      const customerCount = await ServiceCenter.count();
-      const pages = Math.ceil(customerCount / limit);
-
-      const data = {
-        startIndex,
-        endIndex,
-        pages,
-        next: {},
-        previous: {},
-        results: {},
-      };
-
-      if (endIndex < (await ServiceCenter.count())) {
-        data.next = {
-          page: page + 1,
-          limit: limit,
-        };
-      }
-
-      if (startIndex > 0) {
-        data.previous = {
-          page: page - 1,
-          limit: limit,
-        };
-      }
-      try {
-        data.results = await getConnection()
-          .createQueryBuilder(ServiceCenter, "s")
-          .skip(startIndex)
-          .limit(limit)
-          .getMany();
-      } catch (err) {
-        return next(new HandleError(400, err.field, err.message));
-      }
-      return _.json(new Success(200, "Service center", data).JSON);
+      const query = await this.base.list(page || 1, limit || 10);
+      res.json(new Success(200, "Query success", query).JSON);
     } catch (err) {
-      return next(new HandleError(400, err.field, err.message));
+      next(new HandleError(400, "Raw", err.field, err.message));
     }
   }
 
   async insert(req: Request, res: Response, next: NextFunction) {
-    let response;
     const { name, address, city, phone, id_number } = req.body;
     try {
-      response = await getConnection()
-        .createQueryBuilder(ServiceCenter, "s")
-        .insert()
-        .values({
+      const query = await this.base.create(
+        {
           name,
           address,
           city,
-          phone,
           id_number,
-        })
-        .returning("*")
-        .execute();
+          phone,
+        },
+        {
+          checkIfAlreadyExists: true,
+          checkTypes: true,
+        }
+      );
+      res.json(new Success(200, "Query success", query!.raw[0]));
     } catch (err) {
-      return next(new HandleError(400, err.field, err.message));
+      next(new HandleError(400, "Raw", err.field, err.message));
     }
-    res.json(new Success(200, "Query success", response.raw[0]));
   }
 }

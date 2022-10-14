@@ -7,6 +7,10 @@ import {
 } from "typeorm";
 
 declare global {
+  export interface OptionsParams {
+    checkIfAlreadyExists?: boolean;
+    checkTypes?:boolean;
+  }
   export declare class BaseControllerFunctions<
     T extends EntityTarget<ObjectLiteral>
   > {

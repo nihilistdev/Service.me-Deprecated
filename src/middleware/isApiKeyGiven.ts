@@ -7,7 +7,9 @@ export const isApiKeyGiven = (
   _: Response,
   next: NextFunction
 ) => {
-  if (req.headers["api_key"] || req.headers["x-api-key"]) return next();
+  if (req.headers["api_key"] || req.headers["x-api-key"]) {
+    return next()
+  };
   const error = new HandleError(
     403,
     "Validation",
