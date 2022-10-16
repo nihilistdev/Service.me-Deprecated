@@ -41,6 +41,9 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => ServiceCenter, (ServiceCenter) => ServiceCenter.sc_id)
+  @OneToMany(() => ServiceCenter, (ServiceCenter) => ServiceCenter.sc_id, {
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+  })
   ownerOf: ServiceCenter[];
 }

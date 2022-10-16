@@ -4,11 +4,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
+import { Ticket } from "../ticket/Ticket";
 
 @Entity()
 export class Customers extends BaseEntity {
@@ -50,4 +52,10 @@ export class Customers extends BaseEntity {
     (serviceCenter) => serviceCenter.customers_id
   )
   ServiceCenter: CustomersInServiceCenter[];
+
+  @ManyToOne(() => Ticket, (ticket) => ticket.id, {
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE",
+  })
+  ticket: Ticket;
 }

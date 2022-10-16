@@ -73,7 +73,14 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     params?: ObjectLiteral | undefined,
     options?: OptionsParams
   ): Promise<InsertResult | undefined> {
-    if (options?.checkIfAlreadyExists) this.checkIfExists(params || {});
+    if (options?.checkIfAlreadyExists) {
+      if (!(await this.checkIfExists(params as ObjectLiteral)))
+        throw new HandleError(
+          406,
+          "Validation",
+          "There is already record with given data"
+        );
+    }
 
     if (options?.checkTypes) {
       this.validateTypes(params || {});

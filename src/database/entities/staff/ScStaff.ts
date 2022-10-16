@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { ServiceCenter } from "../service_center/ServiceCenter";
 import { StaffRoles } from "../StaffRoles/StaffRoles";
+import { Ticket } from "../ticket/Ticket";
 import { User } from "../user/user";
 
 @Entity()
@@ -48,4 +49,7 @@ export class Staff extends BaseEntity {
     onDelete: "RESTRICT",
   })
   roles: StaffRoles;
+
+  @ManyToOne(() => Ticket, (ticket) => ticket.id)
+  ticket: Ticket;
 }

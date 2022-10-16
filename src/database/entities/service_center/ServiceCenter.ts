@@ -12,6 +12,7 @@ import {
 import { City } from "../city/City";
 import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
 import { Staff } from "../staff/ScStaff";
+import { Ticket } from "../ticket/Ticket";
 import { User } from "../user/user";
 
 @Entity()
@@ -62,7 +63,16 @@ export class ServiceCenter extends BaseEntity {
   })
   city: City;
 
-  @OneToMany(() => Staff, (s) => s.id)
+  @ManyToOne(() => Ticket, (ticket) => ticket.id, {
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE",
+  })
+  ticket: Ticket;
+
+  @OneToMany(() => Staff, (s) => s.id, {
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE",
+  })
   staff: Staff[];
 
   @CreateDateColumn()
