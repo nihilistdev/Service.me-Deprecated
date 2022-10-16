@@ -3,12 +3,21 @@ import { UpdateServiceCenter } from "@middleware/validation/service_center/Updat
 import { ServiceCenterController } from "@controllers/service_center";
 import { isAuth } from "@middleware/isAuth";
 import { CreateServiceCenter } from "@middleware/validation/service_center/CreateServiceCenter";
+import { isAdminOrOwner } from "@middleware/isAdminOrOwner";
 
 const router = Router();
 const controller = new ServiceCenterController();
 
-router.post("/create", [isAuth, CreateServiceCenter], controller.insert.bind(controller));
-router.put("/update/:id", [isAuth, UpdateServiceCenter], controller.update.bind(controller));
+router.post(
+  "/create",
+  [isAuth, CreateServiceCenter],
+  controller.insert.bind(controller)
+);
+router.put(
+  "/update/:id",
+  [isAuth, UpdateServiceCenter, isAdminOrOwner],
+  controller.update.bind(controller)
+);
 router.get("/list", [isAuth], controller.list.bind(controller));
 router.delete("/delete", [isAuth], controller.delete.bind(controller));
 

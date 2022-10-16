@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { City } from "../city/City";
 import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
+import { Staff } from "../staff/ScStaff";
 import { User } from "../user/user";
 
 @Entity()
@@ -41,11 +42,18 @@ export class ServiceCenter extends BaseEntity {
 
   @OneToMany(
     () => CustomersInServiceCenter,
-    (customer) => customer.service_centers_sc_id
+    (customer) => customer.service_centers_sc_id,
+    {
+      onUpdate: "CASCADE",
+      onDelete: "RESTRICT",
+    }
   )
   customers: CustomersInServiceCenter[];
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.id, {
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+  })
   owner: User;
 
   @ManyToOne(() => City, (city) => city.id, {
@@ -53,6 +61,9 @@ export class ServiceCenter extends BaseEntity {
     onUpdate: "CASCADE",
   })
   city: City;
+
+  @OneToMany(() => Staff, (s) => s.id)
+  staff: Staff[];
 
   @CreateDateColumn()
   created_at: Date;

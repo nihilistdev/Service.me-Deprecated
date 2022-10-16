@@ -133,17 +133,23 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     }
   }
 
-  async filter(param?: string, where?: Where, whereParams?:ObjectLiteral): Promise<T | T[]> {
+  async filter(
+    param?: string,
+    where?: Where,
+    whereParams?: ObjectLiteral
+  ): Promise<T | T[]> {
     if (!param) return {} as T;
     try {
       const query = await getRepository(this.repository)
         .createQueryBuilder()
         .select()
         .where(
-          `document_with_weights @@ to_tsquery(concat(:query::text,':*')) ${where ? `and ${where}` : ""}`,
+          `document_with_weights @@ to_tsquery(concat(:query::text,':*')) ${
+            where ? `and ${where}` : ""
+          }`,
           {
             query: param,
-            ...whereParams || ""
+            ...(whereParams || {}),
           }
         )
         .orderBy(

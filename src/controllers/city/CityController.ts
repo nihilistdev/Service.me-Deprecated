@@ -29,13 +29,16 @@ export class CityController {
     }
   }
 
-  public async filter(req: Request, res:Response, next: NextFunction) {
+  public async filter(req: Request, res: Response, next: NextFunction) {
     const { text, where } = req.body;
-    if (text.length === 0)
-      res.json(new Success(200, "Query success", {}));
+    if (text.length === 0) res.json(new Success(200, "Query success", {}));
 
     try {
-      const query = await this.base.filter(text, where.clause, where.params);
+      const query = await this.base.filter(
+        text,
+        !where ? "" : where.clause,
+        where ? where.params : {}
+      );
       if (query) res.json(new Success(200, "Query success", query));
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
