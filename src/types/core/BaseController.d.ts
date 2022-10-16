@@ -9,7 +9,7 @@ import {
 declare global {
   export interface OptionsParams {
     checkIfAlreadyExists?: boolean;
-    checkTypes?:boolean;
+    checkTypes?: boolean;
   }
   export declare class BaseControllerFunctions<
     T extends EntityTarget<ObjectLiteral>
@@ -17,8 +17,10 @@ declare global {
     list(
       page: number,
       limit: number,
-      params?: ObjectLiteral | undefined
-    ): Promise<T | T[]>;
+      where?: Where,
+      params?: ObjectLiteral,
+      normalList?: boolean
+    ): Promise<PaginatedResponse | any[]>;
     create(params?: ObjectLiteral): Promise<InsertResult | undefined>;
     update(
       instance: any,
@@ -27,6 +29,14 @@ declare global {
     ): Promise<UpdateResult | undefined>;
     filter(param?: string): Promise<T | T[]>;
     delete(param?: ObjectLiteral): Promise<boolean>;
+    query(query: string, params?: any[]): Promise<any>;
+    paginationViewQuery(
+      query: string,
+      page: number,
+      limit: number,
+      where: ViewQueryWhere,
+      params: ViewQueryParams
+    ): Promise<PaginatedResponse | null>;
   }
 }
 

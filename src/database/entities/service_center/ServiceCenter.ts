@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { City } from "../city/City";
 import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
 import { User } from "../user/user";
 
@@ -23,8 +24,8 @@ export class ServiceCenter extends BaseEntity {
   @Column()
   address: string;
 
-  @Column()
-  city: string;
+  @Column({ nullable: true })
+  city_id: number;
 
   @Column()
   phone: string;
@@ -46,6 +47,12 @@ export class ServiceCenter extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.id)
   owner: User;
+
+  @ManyToOne(() => City, (city) => city.id, {
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE",
+  })
+  city: City;
 
   @CreateDateColumn()
   created_at: Date;

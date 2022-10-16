@@ -12,13 +12,28 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
 {
   constructor(private repository: T) {}
 
-  async list(page: number, limit: number): Promise<T | T[]> {
+  async list(
+    page: number,
+    limit: number,
+    where?: Where,
+    params?: ObjectLiteral,
+    normalList?: boolean
+  ): Promise<PaginatedResponse | any[]> {
+    if (normalList) {
+      return await getRepository(this.repository)
+        .createQueryBuilder(this.repository.toString()[0])
+        .where(where, params)
+        .getMany();
+    }
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const count = await getRepository(this.repository).count();
+    const count = await getRepository(this.repository)
+      .createQueryBuilder(this.repository.toString()[0])
+      .where(where, params)
+      .getCount();
     const pages = Math.ceil(count / limit);
 
-    const data = {
+    const data: PaginatedResponse = {
       startIndex,
       endIndex,
       pages,
@@ -41,12 +56,14 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
       };
     }
     try {
-      const query = await getRepository(this.repository)
+      if (page > pages) throw new HandleError(400, "Raw", "Page limit excided");
+      data.results = await getRepository(this.repository)
         .createQueryBuilder(this.repository.toString()[0])
-        .skip()
+        .where(where, params)
+        .offset(startIndex)
         .limit(limit)
         .getMany();
-      return query as T | T[];
+      return data;
     } catch (err) {
       throw new HandleError(400, "Raw", err.message);
     }
@@ -116,16 +133,17 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     }
   }
 
-  async filter(param?: string): Promise<T | T[]> {
+  async filter(param?: string, where?: Where, whereParams?:ObjectLiteral): Promise<T | T[]> {
     if (!param) return {} as T;
     try {
       const query = await getRepository(this.repository)
         .createQueryBuilder()
         .select()
         .where(
-          `document_with_weights @@ to_tsquery(concat(:query::text,':*'))`,
+          `document_with_weights @@ to_tsquery(concat(:query::text,':*')) ${where ? `and ${where}` : ""}`,
           {
             query: param,
+            ...whereParams || ""
           }
         )
         .orderBy(
@@ -158,6 +176,65 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
       return false;
     }
     return true;
+  }
+
+  async query(query: string, params?: any): Promise<any> {
+    try {
+      return await getRepository(this.repository).query(query, params);
+    } catch (err) {
+      throw new HandleError(400, "Raw", err.field, err.message);
+    }
+  }
+
+  async paginationViewQuery(
+    query: string,
+    page: number,
+    limit: number,
+    where?: ViewQueryWhere,
+    params?: ViewQueryParams
+  ): Promise<PaginatedResponse | null> {
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const count = await getRepository(this.repository)
+      .createQueryBuilder(this.repository.toString()[0])
+      .where(where?.cnt || "", params?.cnt && {})
+      .getCount();
+    const pages = Math.ceil(count / limit);
+
+    const data: PaginatedResponse = {
+      startIndex,
+      endIndex,
+      pages,
+      next: {},
+      previous: {},
+      results: {},
+    };
+
+    if (endIndex < count) {
+      data.next = {
+        page: page + 1,
+        limit: limit,
+      };
+    }
+
+    if (startIndex > 0) {
+      data.previous = {
+        page: page - 1,
+        limit: limit,
+      };
+    }
+
+    try {
+      if (page > pages) throw new HandleError(400, "Raw", "Page max excided");
+      data.results = await this.query(query, [
+        limit,
+        startIndex,
+        ...(params?.q || ""),
+      ]);
+      return data;
+    } catch (err) {
+      throw new HandleError(400, "Raw", `${err.field}: ${err.message}`);
+    }
   }
 
   private shallowEqual(object1: ObjectLiteral, object2: ObjectLiteral) {

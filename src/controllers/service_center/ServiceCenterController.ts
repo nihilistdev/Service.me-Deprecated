@@ -33,10 +33,20 @@ export class ServiceCenterController {
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
-    const page = parseInt(req.query["page"] as string, 10);
-    const limit = parseInt(req.query["limit"] as string, 10);
+    const page = parseInt(req.query["page"] as string);
+    const limit = parseInt(req.query["limit"] as string);
+    const list = req.query["list"] || false;
+    const where = req.body["where"] || "";
+    const params = req.body["params"] || {};
+    let query;
+
     try {
-      const query = await this.base.list(page || 1, limit || 10);
+      if (list === "true") {
+        query = await this.base.list(1, 10, where, params, true);
+        res.json(new Success(200, "Query Success", query));
+        return;
+      }
+      query = await this.base.list(page || 1, limit || 10, where, params);
       res.json(new Success(200, "Query success", query).JSON);
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
@@ -56,12 +66,22 @@ export class ServiceCenterController {
         },
         {
           checkIfAlreadyExists: true,
-          checkTypes: true,
         }
       );
       res.json(new Success(200, "Query success", query!.raw[0]));
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
+    }
+  }
+
+  async delete(req: Request, res: Response, next: NextFunction) {
+    const id = req.params.id;
+
+    try {
+      const query = await this.base.delete({id: parseInt(id)});
+      if(query) res.json(new Success(200, "Query success"))
+    } catch(err) {
+      next(new HandleError(400, "Raw", err.field, err.message))
     }
   }
 }

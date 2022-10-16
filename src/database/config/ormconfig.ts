@@ -11,9 +11,13 @@ const db: ConnectionOptions = {
   password: "postgres",
   database: "serviceme",
   logging: !__prod__,
+  synchronize: true,
   entities: ["src/database/entities/**/*.ts"],
   migrations: ["src/database/migrations/*.ts"],
   namingStrategy: new SnakeNamingStrategy(),
+  cli: {
+    migrationsDir:"src/database/migrations"
+  }
 };
 
 export = db;

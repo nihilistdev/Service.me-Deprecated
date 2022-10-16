@@ -10,5 +10,6 @@ const controller = new ServiceCenterController();
 router.post("/create", [isAuth, CreateServiceCenter], controller.insert.bind(controller));
 router.put("/update/:id", [isAuth, UpdateServiceCenter], controller.update.bind(controller));
 router.get("/list", [isAuth], controller.list.bind(controller));
+router.delete("/delete", [isAuth], controller.delete.bind(controller));
 
 export default router;

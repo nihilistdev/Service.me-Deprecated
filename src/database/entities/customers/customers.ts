@@ -30,6 +30,9 @@ export class Customers extends BaseEntity {
   @Column()
   phone!: string;
 
+  @Column({ nullable: true })
+  address: string;
+
   @CreateDateColumn()
   created_at: Date;
 
