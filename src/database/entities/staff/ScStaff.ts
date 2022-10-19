@@ -5,6 +5,7 @@ import {
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { ServiceCenter } from "../service_center/ServiceCenter";
@@ -50,6 +51,6 @@ export class Staff extends BaseEntity {
   })
   roles: StaffRoles;
 
-  @ManyToOne(() => Ticket, (ticket) => ticket.id)
-  ticket: Ticket;
+  @OneToMany(() => Ticket, (ticket) => ticket.id)
+  ticket: Ticket[];
 }

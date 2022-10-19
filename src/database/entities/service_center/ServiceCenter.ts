@@ -63,11 +63,11 @@ export class ServiceCenter extends BaseEntity {
   })
   city: City;
 
-  @ManyToOne(() => Ticket, (ticket) => ticket.id, {
+  @OneToMany(() => Ticket, (ticket) => ticket.id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
-  ticket: Ticket;
+  ticket: Ticket[];
 
   @OneToMany(() => Staff, (s) => s.id, {
     onDelete: "RESTRICT",

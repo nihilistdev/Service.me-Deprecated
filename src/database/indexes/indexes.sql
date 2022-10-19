@@ -45,3 +45,17 @@ end
 $$ LANGUAGE plpgsql;
 CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
     ON city FOR EACH ROW EXECUTE PROCEDURE city_tsvector_trigger();
+
+update ticket set document_with_weights = setweight(to_tsvector(title), 'A');
+CREATE INDEX ticket_document_weights_idx
+  ON ticket
+  USING GIN (document_with_weights);
+        CREATE FUNCTION ticket_tsvector_trigger() RETURNS trigger AS $$
+begin
+  new.document_with_weights :=
+  setweight(to_tsvector('english', coalesce(new.title, '')), 'A');
+  return new;
+end
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
+    ON ticket FOR EACH ROW EXECUTE PROCEDURE ticket_tsvector_trigger();

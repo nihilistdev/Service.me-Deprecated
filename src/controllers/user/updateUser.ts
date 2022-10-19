@@ -17,7 +17,7 @@ export const UpdateUserContrller = async (
       new HandleError(403, "Unauthorized", "This user is not reachable!")
     );
 
-  let { name, last_name, email, username } = req.body;
+  let { first_name, last_name, email, username } = req.body;
 
   try {
     const user = await User.findOne({ where: { id } });
@@ -30,7 +30,7 @@ export const UpdateUserContrller = async (
       .createQueryBuilder()
       .update(User)
       .set({
-        name,
+        first_name,
         last_name,
         email,
         username,

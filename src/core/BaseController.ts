@@ -250,6 +250,10 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     }
   }
 
+  async retriveInstance(id: number) {
+    return await getRepository(this.repository).findOneOrFail(id);
+  }
+
   private shallowEqual(object1: ObjectLiteral, object2: ObjectLiteral) {
     delete object2.id;
     const keys1 = Object.keys(object1);

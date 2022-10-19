@@ -13,7 +13,7 @@ export const RegisterController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, last_name, email, username, password } = req.body;
+  const { first_name, last_name, email, username, password } = req.body;
 
   try {
     const user = await User.findOne({ where: { email: email } });
@@ -30,7 +30,7 @@ export const RegisterController = async (
         .insert()
         .into(User)
         .values({
-          name,
+          first_name,
           last_name,
           email,
           username,
@@ -52,7 +52,7 @@ export const RegisterController = async (
       const success = new Success(200, "User created successfuly", {
         token: token,
       });
-      await ApiKeys.create({user_id: query.raw[0].id, key: v4()}).save();
+      await ApiKeys.create({ user_id: query.raw[0].id, key: v4() }).save();
       return res.json(success.JSON);
     } catch (err) {
       const error = new HandleError(400, err.field, err.message, null, err);

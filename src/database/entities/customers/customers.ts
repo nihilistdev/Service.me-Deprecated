@@ -4,7 +4,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -53,7 +52,7 @@ export class Customers extends BaseEntity {
   )
   ServiceCenter: CustomersInServiceCenter[];
 
-  @ManyToOne(() => Ticket, (ticket) => ticket.id, {
+  @OneToMany(() => Ticket, (ticket) => ticket.id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })

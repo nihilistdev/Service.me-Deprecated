@@ -3,7 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -31,25 +31,28 @@ export class Ticket extends BaseEntity {
   @Column()
   staff_id: number;
 
+  @Column({ type: "tsvector", select: false, nullable: true })
+  document_with_weights: any;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Staff, (staff) => staff.id, {
+  @ManyToOne(() => Staff, (staff) => staff.id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
   staff: Staff[];
 
-  @OneToMany(() => Customers, (customers) => customers.id, {
+  @ManyToOne(() => Customers, (customers) => customers.id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
   customer: Customers[];
 
-  @OneToMany(() => ServiceCenter, (sc) => sc.sc_id, {
+  @ManyToOne(() => ServiceCenter, (sc) => sc.sc_id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
