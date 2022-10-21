@@ -1,9 +1,0 @@
-node_modules/
-dist/
-.env
-log/
-.vscode/
-coverage/
-.DS_Store
-rest/
-yarn-error.log
