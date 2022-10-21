@@ -9,6 +9,7 @@
     "start:dev": "nodemon -e ts --watch src src/index.ts",
     "gen:types-development": "npx gen-env-types config/.env.developmet -o src/types/env.d.ts",
     "gen:migrations": "ts-node ./node_modules/.bin/typeorm migration:generate --config ./src/database/config/ormconfig.ts -n ",
+    "create:migrations": "ts-node ./node_modules/.bin/typeorm migration:create --config ./src/database/config/ormconfig.ts -n ",
     "revert:migrations": "typeorm migration:revert",
     "run:migrations": "ts-node ./node_modules/typeorm/cli.js migration:run --config ./src/database/config/ormconfig.ts",
     "format": "prettier . --write",

@@ -10,6 +10,7 @@ import {
 import { Customers } from "../customers/customers";
 import { ServiceCenter } from "../service_center/ServiceCenter";
 import { Staff } from "../staff/ScStaff";
+import { TicketStatus } from "../ticket_status/TicketStatus";
 
 @Entity()
 export class Ticket extends BaseEntity {
@@ -57,4 +58,10 @@ export class Ticket extends BaseEntity {
     onUpdate: "CASCADE",
   })
   sc: ServiceCenter[];
+
+  @ManyToOne(() => TicketStatus, (t_status) => t_status.id, {
+    onDelete: "RESTRICT",
+    onUpdate: "CASCADE",
+  })
+  ticket_status: TicketStatus;
 }

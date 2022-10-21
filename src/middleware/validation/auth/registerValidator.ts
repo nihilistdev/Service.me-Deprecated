@@ -8,7 +8,7 @@ export const registerValidator = (
   _: Response,
   next: NextFunction
 ) => {
-  let { name, last_name, email, username, password, confirmPassword } =
+  let { first_name, last_name, email, username, password, confirmPassword } =
     req.body;
 
   const errorValidator: ErrorValidation[] = [...new Array()];
@@ -23,8 +23,8 @@ export const registerValidator = (
     errorValidator.push({ email: "Email is required" });
   if (validator.isEmpty(password))
     errorValidator.push({ password: "Password is required" });
-  if (validator.isEmpty(name))
-    errorValidator.push({ name: "Name cannot be ampty" });
+  if (validator.isEmpty(first_name))
+    errorValidator.push({ first_name: "Name cannot be ampty" });
   if (validator.isEmpty(last_name))
     errorValidator.push({ last_name: "Name cannot be ampty" });
   if (validator.isEmpty(username))

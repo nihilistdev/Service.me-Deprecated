@@ -3,7 +3,6 @@ dist/
 .env
 log/
 .vscode/
-migrations/
 coverage/
 .DS_Store
 rest/
