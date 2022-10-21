@@ -4,12 +4,14 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Customers } from "../customers/customers";
 import { ServiceCenter } from "../service_center/ServiceCenter";
 import { Staff } from "../staff/ScStaff";
+import { TicketResolutions } from "../ticket_resolutions/TicketResolutions";
 import { TicketStatus } from "../ticket_status/TicketStatus";
 
 @Entity()
@@ -45,23 +47,26 @@ export class Ticket extends BaseEntity {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
-  staff: Staff[];
+  staff: Staff;
 
   @ManyToOne(() => Customers, (customers) => customers.id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
-  customer: Customers[];
+  customer: Customers;
 
   @ManyToOne(() => ServiceCenter, (sc) => sc.sc_id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
-  sc: ServiceCenter[];
+  sc: ServiceCenter;
 
   @ManyToOne(() => TicketStatus, (t_status) => t_status.id, {
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
   ticket_status: TicketStatus;
+
+  @OneToMany(() => TicketResolutions, (tr) => tr.id)
+  ticket_resolutions: TicketResolutions[];
 }

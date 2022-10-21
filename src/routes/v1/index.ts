@@ -7,6 +7,7 @@ import CityRoute from "./CityRoute";
 import CountryRoute from "./CountryRoute";
 import StaffRoute from "./StaffRoute";
 import TicketRoute from "./TicektRoute";
+import TicketResolutionsRoute from "./TicketResolutions";
 import { __prod__ } from "@utils/constants/constants";
 
 const router = Router();
@@ -19,5 +20,6 @@ router.use("/city", CityRoute);
 router.use("/country", CountryRoute);
 router.use("/staff", StaffRoute);
 router.use("/ticket", TicketRoute);
+router.use("/ticket-resolutions", TicketResolutionsRoute);
 
 export default router;

@@ -250,8 +250,13 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     }
   }
 
-  async retriveInstance(id: number) {
-    return await getRepository(this.repository).findOneOrFail(id);
+  async retriveInstance(id?: number, where?: ObjectLiteral) {
+    if (id) return await getRepository(this.repository).findOneOrFail(id);
+    if (where)
+      return await getRepository(this.repository).findOneOrFail({
+        where: where,
+      });
+    return undefined;
   }
 
   private shallowEqual(object1: ObjectLiteral, object2: ObjectLiteral) {
