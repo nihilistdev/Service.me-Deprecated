@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@components/ThemeToggle";
 import { useQuery } from "@tanstack/react-query";
 import * as React from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -39,6 +40,7 @@ const Home = () => {
 
   return (
     <div>
+      <ThemeToggle />
       {isLoading
         ? "Loading ...."
         : customers.results.map((e: any) => (

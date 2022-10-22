@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import Router from "next/router";
 import React from "react";
 import axiosService from "./axios";
 
@@ -7,6 +8,7 @@ export const useIsAuth = () => {
     axiosService("user/info", { method: "GET" }).then((res) => res.data)
   );
   React.useEffect(() => {
-    if (!isLoading && !data?.data) console.error("Not authenticated");
-  }, [isLoading, data]);
+    if (!isLoading && !data?.data) Router.replace("/login?next=/");
+    if (Router.pathname === "/login") Router.push("/");
+  }, [isLoading, data, Router]);
 };

@@ -20,27 +20,30 @@ export const LoginController = async (
         : { where: { username: emailOrUsername } }
     );
     if (!user) {
-      const error = new HandleError(404, "General", "Not found", [
-        "Incorrect email or password",
+      const error = new HandleError(401, "General", "Not found", [
+        { field: "emailOrUsername", message: "Wrong username or email" },
       ]);
-      return next(error);
-    }
-
-    if (!user.confirmed || user.confirmed === null) {
-      const error = new HandleError(
-        403,
-        "Unauthorized",
-        "You must activate your account in order to log in"
-      );
-      return next(error);
+      return res.status(error.httpStatusCode).send(error);
     }
 
     let valid = await argon2.verify(user.password, password);
     if (!valid) {
-      const error = new HandleError(404, "General", "Password", [
-        `Password doesn't match one in database`,
+      const error = new HandleError(401, "General", "Password", [
+        {
+          field: "password",
+          message: "Password is not matching one in database",
+        },
       ]);
-      return next(error);
+      return res.status(error.httpStatusCode).send(error);
+    }
+
+    if (!user.confirmed || user.confirmed === null) {
+      const error = new HandleError(
+        401,
+        "Unauthorized",
+        "You must activate your account in order to log in"
+      );
+      return res.status(error.httpStatusCode).send(error);
     }
 
     try {
@@ -56,7 +59,7 @@ export const LoginController = async (
         err
       );
       ConsoleDebug.error(err);
-      return next(error);
+      return next(error.JSON);
     }
   } catch (err) {
     const error = new HandleError(400, "Raw", "Error", err);

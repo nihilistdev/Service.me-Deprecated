@@ -3,7 +3,7 @@ export class HandleError extends Error {
     private statusCode: number,
     private errorType: ErrorType,
     message: string,
-    private errors: string[] | null = null,
+    private errors: any[] | null = null,
     private errorRaw: any = null,
     private errorValidation: ErrorValidation[] | null = null
   ) {
