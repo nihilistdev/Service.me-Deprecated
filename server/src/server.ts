@@ -20,7 +20,14 @@ const app = express();
 const RedisStore = connectRedis(session);
 const redis = new Redis(process.env.REDIS);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
+app.set("trust proxy", 1);
 app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
