@@ -1,13 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { COOKIE_NAME } from "@utils/constants/constants";
 import HandleError from "@utils/response/errors";
 import Success from "@utils/response/success";
 
-export const logoutContoller = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const logoutContoller = async (req: Request, res: Response) => {
   req.session!.destroy((err) => {
     if (err) {
       const error = new HandleError(
@@ -18,7 +14,7 @@ export const logoutContoller = async (
         null,
         err
       );
-      return next(error);
+      res.status(error.httpStatusCode).send(error);
     }
   });
   res.clearCookie(COOKIE_NAME);

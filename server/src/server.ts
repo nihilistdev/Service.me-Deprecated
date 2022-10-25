@@ -16,9 +16,16 @@ import path from "path";
 import routes from "@routes";
 import session from "express-session";
 
+declare module "express-session" {
+  interface SessionData {
+    userId: number;
+  }
+}
+
 const app = express();
 const RedisStore = connectRedis(session);
 const redis = new Redis(process.env.REDIS);
+app.use(RedisContext.setup(redis));
 
 app.use(
   cors({
@@ -29,7 +36,7 @@ app.use(
 
 app.set("trust proxy", 1);
 app.use(helmet());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
@@ -43,14 +50,14 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
       httpOnly: true,
       sameSite: "lax",
-      secure: !!__prod__,
+      secure: false,
+      domain: undefined,
     },
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET as string,
     resave: false,
   })
 );
-app.use(RedisContext.setup(redis));
 
 try {
   const accessLogStream = fs.createWriteStream(
