@@ -1,18 +1,30 @@
-import { logout } from "@api/auth/Logout";
-import { useDisclosure } from "@hooks/useDisclosure";
-import { isServer, useMutation, useQuery } from "@tanstack/react-query";
-import { userInfo } from "api/user/UserInfo";
-import { useRouter } from "next/router";
+import { useDisclosure } from "../hooks/useDisclosure";
 import * as React from "react";
-import { Button } from "./Button";
-import { useAuth } from "./ConfigComponent";
 import { ThemeToggle } from "./ThemeToggle";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "../api/auth/Logout";
+import { useNavigate, Link } from "react-router-dom";
+import { Button } from "./Button";
+import { getUser } from "@store/hooks/getUser";
+import { useDispatch } from "react-redux";
+import { authSlice } from "@store/slices/auth";
+import { getUserDetails } from "@store/actions/userActions";
+import { AppDispatch } from "@store/index";
 
 interface NavbarProps extends React.HTMLAttributes<HTMLElement> {}
 
 export const Navbar = ({}: NavbarProps) => {
-  const [state, dispatch] = useAuth();
-
+  const dispatch = useDispatch<AppDispatch>();
+  const user = getUser();
+  const navigate = useNavigate();
+  const logoutMutation = useMutation(logout, {
+    onSuccess: () => {
+      dispatch(authSlice.actions.logout());
+    },
+  });
+  React.useEffect(() => {
+    console.log(dispatch(getUserDetails()));
+  }, [dispatch]);
   const {
     getButtonProps: menuBtnProps,
     getDisclosureprops: menuBtnDisclosureProps,
@@ -21,9 +33,9 @@ export const Navbar = ({}: NavbarProps) => {
     getButtonProps: mobileMenuButtonProps,
     getDisclosureprops: mobileMenuDisclosureProps,
   } = useDisclosure();
-  const router = useRouter();
+
   return (
-    <nav className="p-3 bg-gray-50 rounded border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav className="p-3 bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <a href="#" className="flex items-center">
           <img
@@ -31,36 +43,23 @@ export const Navbar = ({}: NavbarProps) => {
             className="mr-3 h-6 sm:h-9"
             alt="Flowbite Logo"
           />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-xl hidden font-semibold whitespace-nowrap dark:text-white md:flex">
             Service me
           </span>
         </a>
         <div className="flex items-center md:order-2 gap-5">
           <ThemeToggle />
-          {state.isLoading && (
-            <div role="status">
-              <svg
-                aria-hidden="true"
-                className="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                />
-              </svg>
-              <span className="sr-only">Loading...</span>
+          {!user ? (
+            <div className="mb-4 hidden lg:flex">
+              <Link to="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
+              <Link to="/register">
+                <Button>Register</Button>
+              </Link>
             </div>
-          )}
-          {!state ? (
-            <Button>Login</Button>
-          ) : (
+          ) : null}
+          {user ? (
             <>
               <button
                 type="button"
@@ -70,8 +69,8 @@ export const Navbar = ({}: NavbarProps) => {
                 <span className="sr-only">Open user menu</span>
                 <div className="inline-flex overflow-hidden relative justify-center items-center w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-600">
                   <span className="font-medium text-gray-600 dark:text-gray-300">
-                    {state.first_name[0]}
-                    {state.last_name[0]}
+                    {user?.first_name[0]}
+                    {user?.last_name[0]}
                   </span>
                 </div>
               </button>
@@ -82,20 +81,20 @@ export const Navbar = ({}: NavbarProps) => {
               >
                 <div className="py-3 px-4">
                   <span className="block text-sm text-gray-900 dark:text-white">
-                    {state.first_name} {state.last_name}
+                    {user?.first_name} {user?.last_name}
                   </span>
                   <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
-                    {state.email}
+                    {user?.email}
                   </span>
                 </div>
                 <ul className="py-1" aria-labelledby="user-menu-button">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to={"/dashboard"}
                       className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
                       Dashboard
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <a
@@ -114,11 +113,10 @@ export const Navbar = ({}: NavbarProps) => {
                     </a>
                   </li>
                   <li
-                  // onClick={async () => {
-                  //   const response = await logoutMutation.mutateAsync();
-                  //   console.log(response);
-                  //   router.push("/login");
-                  // }}
+                    onClick={async () => {
+                      await logoutMutation.mutateAsync();
+                      navigate("/");
+                    }}
                   >
                     <a
                       href="#"
@@ -130,7 +128,7 @@ export const Navbar = ({}: NavbarProps) => {
                 </ul>
               </div>
             </>
-          )}
+          ) : null}
           <button
             type="button"
             className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -156,7 +154,7 @@ export const Navbar = ({}: NavbarProps) => {
           className="justify-between items-center w-full md:flex md:w-auto md:order-1"
           {...mobileMenuDisclosureProps()}
         >
-          <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-gray-50  dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="flex flex-col p-4 mt-4 bg-transparent rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
             <li>
               <a
                 href="#"
@@ -168,7 +166,7 @@ export const Navbar = ({}: NavbarProps) => {
             </li>
             <li>
               <a
-                href="#"
+                href="/"
                 className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
               >
                 About
@@ -199,6 +197,12 @@ export const Navbar = ({}: NavbarProps) => {
               </a>
             </li>
           </ul>
+          <div className="flex flex-row justify-self-center justify-center md:hidden lg:hidden">
+            <Button variant="outline" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+            <Button>Register</Button>
+          </div>
         </div>
       </div>
     </nav>
