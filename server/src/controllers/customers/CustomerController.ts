@@ -21,7 +21,7 @@ export class CustomerController {
     }
   }
 
-  @Log({type: 'profile'})
+  @Log({ type: "profile" })
   public async listCustomers(req: Request, res: Response, next: NextFunction) {
     const page = parseInt(req.query["page"] as string);
     const limit = parseInt(req.query["limit"] as string);
@@ -99,20 +99,40 @@ export class CustomerController {
       email,
       pin,
       phone,
+      address,
     }: { [key: string]: string } = req.body;
+
     const instance = await Customers.findOneOrFail({
       where: { id: parseInt(id) },
     });
 
     try {
-      const query = await this.base.update(instance, {
-        first_name,
-        last_name,
-        email,
-        pin,
-        phone,
-      });
+      const query = await this.base.update(
+        instance,
+        {
+          first_name,
+          last_name,
+          email,
+          pin,
+          phone,
+          address,
+        },
+        "id = :id",
+        { id: id }
+      );
+
       res.json(new Success(200, "Query success", query!.raw[0]));
+    } catch (err) {
+      next(new HandleError(400, err.field, err.message));
+    }
+  }
+
+  public async get(req: Request, res: Response, next: NextFunction) {
+    const id = parseInt(req.params.id);
+
+    try {
+      const query = await this.base.retriveInstance(id);
+      res.json(new Success(200, "Query success", query));
     } catch (err) {
       next(new HandleError(400, err.field, err.message));
     }

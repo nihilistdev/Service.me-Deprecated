@@ -16,8 +16,13 @@ router.put(
   [isAuth, ValidateCreateCustomer],
   customers.updateCustomers.bind(customers)
 );
-router.delete("/delete/:id", [isAuth], customers.deleteCustomer.bind(customers));
+router.delete(
+  "/delete/:id",
+  [isAuth],
+  customers.deleteCustomer.bind(customers)
+);
 router.post("/all", [isAuth], customers.listCustomers.bind(customers));
 router.post("/filter", [isAuth], customers.filterCustomer.bind(customers));
+router.get("/get/:id", [isAuth], customers.get.bind(customers));
 
 export default router;

@@ -25,8 +25,8 @@ export class Customers extends BaseEntity {
   @Column()
   email: string;
 
-  @Column({ nullable: true, unique: true, type: "bigint" })
-  pin!: number;
+  @Column({ nullable: true, unique: true })
+  pin!: string;
 
   @Column()
   phone!: string;

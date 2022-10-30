@@ -7,16 +7,16 @@ export const ValidateCreateCustomer = (
   _: Response,
   next: NextFunction
 ) => {
-  let { first_name, last_name, email, pin, phone } = req.body;
-
+  let { first_name, last_name, email, pin, phone, address } = req.body;
+  console.log(pin);
   const base = new BaseValidator([
     { name: "first_name", value: first_name, required: true },
     { name: "last_name", value: last_name, required: true },
     { name: "email", value: email, required: true, email: true },
-    { name: "pin", value: parseInt(pin), required: true },
+    { name: "pin", value: pin, required: true },
     { name: "phone", value: phone, required: true },
+    { name: "address", value: address, required: true },
   ]).validate();
-  console.log(base);
 
   if (base.length !== 0) {
     const error = new HandleError(

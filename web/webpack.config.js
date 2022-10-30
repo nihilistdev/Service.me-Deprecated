@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const DotEnv = require("dotenv-webpack");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const path = require("path");
 
 module.exports = {
   mode: prod ? "production" : "development",
@@ -22,7 +23,7 @@ module.exports = {
         use: "ts-loader",
       },
       {
-        test: /\.css$/,
+        test: /\.(scss|css)$/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
     ],
@@ -34,6 +35,11 @@ module.exports = {
     compress: true,
     port: 3000,
     historyApiFallback: true,
+  },
+  output: {
+    path: path.join(__dirname, "public"),
+    filename: "bundle.js",
+    publicPath: "/",
   },
   devtool: prod ? undefined : "source-map",
   resolve: {

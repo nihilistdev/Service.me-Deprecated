@@ -1,11 +1,9 @@
+import { isAuth } from "@utils/isAuth";
 import * as React from "react";
 import { Navigate } from "react-router-dom";
-import { useAppContextProvider } from "./AuthProvider";
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const { user } = useAppContextProvider();
-  console.log(user);
-  if (!user) {
+  if (!isAuth()) {
     return <Navigate to="/" replace />;
   }
 

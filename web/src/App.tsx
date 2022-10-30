@@ -5,6 +5,9 @@ import { Dashboard } from "@pages/Dashboard";
 import { Landing } from "@pages/Landing";
 import { useAppContextProvider } from "@components/AuthProvider";
 import ThemeProvider from "./context/ThemeContext";
+import { ProtectedRoute } from "@components/ProtectedRoute";
+import { CreateCustomers } from "@pages/customers/CreateCustomers";
+import { EditCustomer } from "@pages/customers/EditCustomers";
 
 const App = () => {
   const { user } = useAppContextProvider();
@@ -15,9 +18,25 @@ const App = () => {
         <Route
           path="dashboard"
           element={
-            <React.Suspense fallback={<h1>Loading user...</h1>}>
+            <ProtectedRoute>
               <Dashboard />
-            </React.Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="customers/create"
+          element={
+            <ProtectedRoute>
+              <CreateCustomers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="customers/:id/*"
+          element={
+            <ProtectedRoute>
+              <EditCustomer />
+            </ProtectedRoute>
           }
         />
         <Route path="login" element={<Login />} />
