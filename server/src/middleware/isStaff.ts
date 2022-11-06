@@ -11,10 +11,9 @@ export const isStaff = async (
     where: {
       user_id: req.session.userId,
       roles_id: 1,
-      sc_sc_id: req.body["sc_sc_id"] || req.headers["x-sc-id"],
     },
   });
-  if (!isStaff)
+  if (isStaff?.sc_sc_id !== parseInt(req.headers["x-sc-id"] as string))
     next(new HandleError(400, "Validation", "User is not part of staff"));
   next();
 };

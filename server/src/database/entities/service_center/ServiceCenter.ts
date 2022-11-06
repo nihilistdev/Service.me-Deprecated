@@ -54,6 +54,7 @@ export class ServiceCenter extends BaseEntity {
   @ManyToOne(() => User, (user) => user.id, {
     onUpdate: "CASCADE",
     onDelete: "RESTRICT",
+    nullable: true,
   })
   owner: User;
 

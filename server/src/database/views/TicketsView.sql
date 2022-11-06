@@ -2,6 +2,7 @@ create or replace view public.v_tickets as
 select t.id as ticket_id,
     t.title as ticket_title,
     t.description as ticket_description,
+    sc.sc_sc_id as service_center_id,
     sc.name as service_center_name,
     sc.address as service_center_address,
     sc.phone as service_center_phone,

@@ -1,10 +1,8 @@
 import { Customers } from "@database/entities/customers/customers";
 import BaseController from "@root/core/BaseController";
-import { Log } from "@utils/logger/logger";
 import HandleError from "@utils/response/errors";
 import Success from "@utils/response/success";
 import { Request, Response, NextFunction } from "express";
-
 export class CustomerController {
   constructor(private base = new BaseController(Customers)) {}
 
@@ -16,36 +14,6 @@ export class CustomerController {
     try {
       const query = await this.base.filter(text);
       if (query) res.json(new Success(200, "Query success", query));
-    } catch (err) {
-      next(new HandleError(400, "Raw", err.field, err.message));
-    }
-  }
-
-  @Log({ type: "profile" })
-  public async listCustomers(req: Request, res: Response, next: NextFunction) {
-    const page = parseInt(req.query["page"] as string);
-    const limit = parseInt(req.query["limit"] as string);
-    const list = req.query["list"] || false;
-    const where = req.body["where"] || "";
-    const params = req.body["params"] || {};
-    const order = req.body["order"] || {};
-    let query;
-
-    try {
-      if (list === "true") {
-        query = await this.base.list(1, 10, where, params, true);
-        res.json(new Success(200, "Query Success", query));
-        return;
-      }
-      query = await this.base.list(
-        page || 1,
-        limit || 10,
-        where,
-        params,
-        false,
-        order
-      );
-      res.json(new Success(200, "Query success", query).JSON);
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
     }

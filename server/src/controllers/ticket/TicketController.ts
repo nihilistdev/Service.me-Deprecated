@@ -62,6 +62,7 @@ export class TicketController {
     const limit = parseInt(req.query["limit"] as string);
     const where = req.body["where"] || undefined;
     const params = req.body["params"] || undefined;
+    const sc_id = req.headers["x-sc-id"];
 
     try {
       const query = await this.base.paginationViewQuery(
@@ -79,8 +80,8 @@ export class TicketController {
           staff_last_name,
           staff_email,
           staff_username
-        from v_tickets ${
-          where && where.q !== "" ? where.q : ""
+        from v_tickets where service_center_id = ${sc_id} ${
+          where.q && where.q !== "" ? `and ${where.q}` : ""
         } limit $1 offset $2
         `,
         page,
@@ -99,6 +100,8 @@ export class TicketController {
 
     try {
       const query = await this.base.retriveInstance(id);
+      if (parseInt(req.headers["x-sc-id"] as string) !== query?.sc_sc_id)
+        res.status(403).json(new Success(403, "Unauthorized"));
       res.json(new Success(200, "Query success", query));
     } catch (err) {
       next(new HandleError(400, "Raw", `${err.field}: ${err.message}`));

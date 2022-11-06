@@ -218,9 +218,10 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     const endIndex = page * limit;
     const count = await getRepository(this.repository)
       .createQueryBuilder(this.repository.toString()[0])
-      .where(where?.cnt || "", params?.cnt && {})
+      .where(where?.cnt || "")
+      .setParameters(params?.cnt as ObjectLiteral)
       .getCount();
-    const pages = Math.ceil(count / limit);
+    const pages = Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit);
 
     const data: PaginatedResponse = {
       startIndex,
