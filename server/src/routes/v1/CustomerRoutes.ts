@@ -24,5 +24,6 @@ router.delete(
 router.post("/all", [isAuth], customers.listCustomers.bind(customers));
 router.post("/filter", [isAuth], customers.filterCustomer.bind(customers));
 router.get("/get/:id", [isAuth], customers.get.bind(customers));
+router.get("/created-by", [isAuth], customers.getCreatedStaff.bind(customers));
 
 export default router;

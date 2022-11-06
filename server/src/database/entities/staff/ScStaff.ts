@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { CustomersInServiceCenter } from "../customers_in_service_center/CustomersInServiceCenter";
 import { ServiceCenter } from "../service_center/ServiceCenter";
 import { StaffRoles } from "../StaffRoles/StaffRoles";
 import { Ticket } from "../ticket/Ticket";
@@ -60,4 +61,10 @@ export class Staff extends BaseEntity {
     onUpdate: "CASCADE",
   })
   ticket_resolutions: TicketResolutions;
+
+  @OneToMany(() => CustomersInServiceCenter, (csc) => csc.staff_id, {
+    onUpdate: "CASCADE",
+    onDelete: "RESTRICT",
+  })
+  customer_in_sc: CustomersInServiceCenter[];
 }

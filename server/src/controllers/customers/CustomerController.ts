@@ -28,6 +28,7 @@ export class CustomerController {
     const list = req.query["list"] || false;
     const where = req.body["where"] || "";
     const params = req.body["params"] || {};
+    const order = req.body["order"] || {};
     let query;
 
     try {
@@ -36,8 +37,34 @@ export class CustomerController {
         res.json(new Success(200, "Query Success", query));
         return;
       }
-      query = await this.base.list(page || 1, limit || 10, where, params);
+      query = await this.base.list(
+        page || 1,
+        limit || 10,
+        where,
+        params,
+        false,
+        order
+      );
       res.json(new Success(200, "Query success", query).JSON);
+    } catch (err) {
+      next(new HandleError(400, "Raw", err.field, err.message));
+    }
+  }
+
+  public async getCreatedStaff(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    const where = req.body["where"] || undefined;
+
+    try {
+      const query = await this.base.query(
+        `select staff_name, staff_last_name from public.v_customer_created_by ${
+          where && where.q !== "" ? `where ${where}` : ""
+        } `
+      );
+      res.json(new Success(200, "Query Success", query[0]).JSON);
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
     }

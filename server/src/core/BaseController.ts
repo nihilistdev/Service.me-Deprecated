@@ -17,7 +17,11 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     limit: number,
     where?: Where,
     params?: ObjectLiteral,
-    normalList?: boolean
+    normalList?: boolean,
+    orderBy?: {
+      fields?: string;
+      direction?: "ASC" | "DESC" | undefined;
+    }
   ): Promise<PaginatedResponse | any[]> {
     if (normalList) {
       return await getRepository(this.repository)
@@ -62,6 +66,10 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         .where(where, params)
         .offset(startIndex)
         .limit(limit)
+        .orderBy(
+          (orderBy?.fields as string) || "id",
+          orderBy?.direction || "ASC"
+        )
         .getMany();
       return data;
     } catch (err) {
