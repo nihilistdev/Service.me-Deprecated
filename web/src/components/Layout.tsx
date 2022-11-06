@@ -1,11 +1,9 @@
 import * as React from "react";
 import { Navbar } from "./Navbar";
 
-interface LayoutProps extends React.HTMLAttributes<HTMLElement> {
-  user?: User;
-}
+interface LayoutProps extends React.HTMLAttributes<HTMLElement> {}
 
-export const Layout = ({ user, children }: LayoutProps) => {
+export const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <header>

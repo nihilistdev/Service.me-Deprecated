@@ -1,13 +1,10 @@
 import { useDisclosure } from "../hooks/useDisclosure";
 import * as React from "react";
 import { ThemeToggle } from "./ThemeToggle";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "../api/auth/Logout";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "./Button";
 import { getUser } from "@store/hooks/getUser";
 import { useDispatch } from "react-redux";
-import { authSlice } from "@store/slices/auth";
 import { getUserDetails } from "@store/actions/userActions";
 import { AppDispatch } from "@store/index";
 
@@ -17,25 +14,17 @@ export const Navbar = ({}: NavbarProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const user = getUser();
   const navigate = useNavigate();
-  const logoutMutation = useMutation(logout, {
-    onSuccess: () => {
-      dispatch(authSlice.actions.logout());
-    },
-  });
   React.useEffect(() => {
     console.log(dispatch(getUserDetails()));
   }, [dispatch]);
-  const {
-    getButtonProps: menuBtnProps,
-    getDisclosureprops: menuBtnDisclosureProps,
-  } = useDisclosure();
+
   const {
     getButtonProps: mobileMenuButtonProps,
     getDisclosureprops: mobileMenuDisclosureProps,
   } = useDisclosure();
 
   return (
-    <nav className="p-3 bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav className="p-2 bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <a href="#" className="flex items-center">
           <img
@@ -60,74 +49,9 @@ export const Navbar = ({}: NavbarProps) => {
             </div>
           ) : null}
           {user ? (
-            <>
-              <button
-                type="button"
-                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                {...menuBtnProps()}
-              >
-                <span className="sr-only">Open user menu</span>
-                <div className="inline-flex overflow-hidden relative justify-center items-center w-10 h-10 bg-gray-100 rounded-full dark:bg-gray-600">
-                  <span className="font-medium text-gray-600 dark:text-gray-300">
-                    {user?.first_name[0]}
-                    {user?.last_name[0]}
-                  </span>
-                </div>
-              </button>
-              <div
-                className="z-50 absolute top-16 right-16 w-44 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                animate={menuBtnDisclosureProps().hidden ? "closed" : "open"}
-                {...menuBtnDisclosureProps()}
-              >
-                <div className="py-3 px-4">
-                  <span className="block text-sm text-gray-900 dark:text-white">
-                    {user?.first_name} {user?.last_name}
-                  </span>
-                  <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
-                    {user?.email}
-                  </span>
-                </div>
-                <ul className="py-1" aria-labelledby="user-menu-button">
-                  <li>
-                    <Link
-                      to={"/dashboard"}
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      Earnings
-                    </a>
-                  </li>
-                  <li
-                    onClick={async () => {
-                      await logoutMutation.mutateAsync();
-                      navigate("/");
-                    }}
-                  >
-                    <a
-                      href="#"
-                      className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      Logout
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </>
+            <Button onClick={() => navigate("/dashboard")}>
+              Go to dashboard
+            </Button>
           ) : null}
           <button
             type="button"

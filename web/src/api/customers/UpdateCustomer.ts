@@ -17,6 +17,5 @@ export const updateCustomer = async ({ id, data }: UpdateCustomerProps) => {
     method: "PUT",
     data: data,
   });
-  console.log(res);
   return res.data.data;
 };

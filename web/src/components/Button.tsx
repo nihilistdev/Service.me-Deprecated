@@ -19,7 +19,7 @@ export const Button = ({
   if (variant === "outline") {
     return (
       <button
-        className="justify-self-center text-white border border-blue-700 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+        className="justify-self-center text-blue-700 dark:text-white border border-blue-700 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mt-5 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
         {...props}
       >
         {isLoading ? (
@@ -51,17 +51,17 @@ export const Button = ({
   }
   return (
     <button
-      className={`justify-self-center text-white ${
+      className={`flex flex-row justify-self-center text-white ${
         color ? color : "bg-blue-700"
       } ${
         color ? color : "hover:bg-blue-800"
-      } focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 ${
+      } focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 ${
         color ? color : "dark:bg-blue-600"
       } ${
         darkColor ? darkColor : "dark:hover:bg-blue-700"
       } focus:outline-none ${
         darkColor ? darkColor : "dark:focus:ring-blue-800"
-      } mt-5`}
+      }`}
       {...props}
     >
       {isLoading ? (

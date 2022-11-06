@@ -9,7 +9,7 @@ import "./styles/index.scss";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store, { persistor } from "./store";
@@ -28,7 +28,7 @@ rootContainer.render(
           </PersistGate>
         </Provider>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   </>
 );

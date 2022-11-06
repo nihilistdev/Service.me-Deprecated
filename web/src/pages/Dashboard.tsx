@@ -1,17 +1,17 @@
-import { Table } from "@components/Table";
+// import { Table } from "@components/Table";
 import { isAuth } from "@utils/isAuth";
 import * as React from "react";
-import { Layout } from "../components/Layout";
-import { customersQuery } from "@api/customers/CustomersQuery";
-import { filterCustomers } from "@api/customers/CustomersFilter";
+import { AppLayout } from "../components/AppLayout";
+// import { customersQuery } from "@api/customers/CustomersQuery";
+// import { filterCustomers } from "@api/customers/CustomersFilter";
 
 interface DashboardProps {}
 
 export const Dashboard = ({}: DashboardProps) => {
   isAuth();
   return (
-    <Layout>
-      <Table
+    <AppLayout>
+      {/* <Table
         name="customers"
         searchMutation={filterCustomers}
         fn={customersQuery}
@@ -33,7 +33,7 @@ export const Dashboard = ({}: DashboardProps) => {
             <td className="py-4 px-6">{data.address}</td>
           </>
         )}
-      />
-    </Layout>
+      /> */}
+    </AppLayout>
   );
 };

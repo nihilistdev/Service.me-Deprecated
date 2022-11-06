@@ -15,7 +15,7 @@ export const SearchModal = ({
 }: SearchModalProps) => {
   return isOpen ? (
     <div
-      className="fixed z-50 w-full  h-full bg-white md:inset-0 h-modal md:h-screen dark:bg-gray-800 overflow-auto"
+      className="fixed z-50 w-full h-full bg-white md:inset-0 md:h-full md:w-full dark:bg-gray-800 overflow-y-scroll"
       {...props}
     >
       <button
@@ -38,7 +38,7 @@ export const SearchModal = ({
         </svg>
         <span className="sr-only">Close modal</span>
       </button>
-      <div className="relative p-4 w-screen h-screen md:h-auto">
+      <div className="relative p-4 w-full h-full md:h-auto">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           <div className="flex justify-between items-center p-5 rounded-t border-b dark:border-gray-600">
             {modalTitle}
