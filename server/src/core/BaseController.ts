@@ -132,7 +132,8 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         .createQueryBuilder()
         .update()
         .set(params as ObjectLiteral)
-        .where(where, parameters)
+        .where(where || "")
+        .setParameters(parameters || {})
         .returning("*")
         .execute();
       if (!query.raw[0]) {
@@ -219,7 +220,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     const count = await getRepository(this.repository)
       .createQueryBuilder(this.repository.toString()[0])
       .where(where?.cnt || "")
-      .setParameters(params?.cnt as ObjectLiteral)
+      .setParameters(params?.cnt || {})
       .getCount();
     const pages = Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit);
 
