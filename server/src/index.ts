@@ -1,5 +1,5 @@
 import "tsconfig-paths/register";
-
+import "dotenv/config";
 import app from "@root/server";
 import { createDbConnection } from "@database/createConnection";
 

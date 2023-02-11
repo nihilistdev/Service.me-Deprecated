@@ -1,8 +1,5 @@
-import "dotenv/config";
 import "reflect-metadata";
-
 import { COOKIE_NAME, __prod__ } from "@utils/constants";
-
 import Redis from "ioredis";
 import { RedisContext } from "@context/Redis";
 import connectRedis from "connect-redis";
