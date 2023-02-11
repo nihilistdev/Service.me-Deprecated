@@ -1,7 +1,7 @@
 import { HandleError } from "@utils/response/errors/Error";
-import {
+import { getRepository } from "typeorm";
+import type {
   EntityTarget,
-  getRepository,
   InsertResult,
   ObjectLiteral,
   UpdateResult,
@@ -10,7 +10,7 @@ import {
 export default class BaseController<T extends EntityTarget<ObjectLiteral>>
   implements BaseControllerFunctions<T>
 {
-  constructor(private repository: T) {}
+  constructor(private readonly repository: T) {}
 
   async list(
     page: number,
@@ -23,7 +23,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
       direction?: "ASC" | "DESC" | undefined;
     }
   ): Promise<PaginatedResponse | any[]> {
-    if (normalList) {
+    if (normalList ?? false) {
       return await getRepository(this.repository)
         .createQueryBuilder(this.repository.toString()[0])
         .where(where, params)
@@ -49,14 +49,14 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     if (endIndex < count) {
       data.next = {
         page: page + 1,
-        limit: limit,
+        limit,
       };
     }
 
     if (startIndex > 0) {
       data.previous = {
         page: page - 1,
-        limit: limit,
+        limit,
       };
     }
     try {
@@ -66,10 +66,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         .where(where, params)
         .offset(startIndex)
         .limit(limit)
-        .orderBy(
-          (orderBy?.fields as string) || "id",
-          orderBy?.direction || "ASC"
-        )
+        .orderBy(orderBy?.fields ?? "id", orderBy?.direction ?? "ASC")
         .getMany();
       return data;
     } catch (err) {
@@ -81,7 +78,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     params?: ObjectLiteral | undefined,
     options?: OptionsParams
   ): Promise<InsertResult | undefined> {
-    if (options?.checkIfAlreadyExists) {
+    if (options?.checkIfAlreadyExists ?? false) {
       if (!(await this.checkIfExists(params as ObjectLiteral)))
         throw new HandleError(
           406,
@@ -90,8 +87,8 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         );
     }
 
-    if (options?.checkTypes) {
-      this.validateTypes(params || {});
+    if (options?.checkTypes ?? false) {
+      this.validateTypes(params ?? {});
       throw new HandleError(400, "General", "User exists by given details");
     }
 
@@ -133,7 +130,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         .update()
         .set(params as ObjectLiteral)
         .where(where || "")
-        .setParameters(parameters || {})
+        .setParameters(parameters ?? {})
         .returning("*")
         .execute();
       if (!query.raw[0]) {
@@ -161,11 +158,11 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
         .select()
         .where(
           `document_with_weights @@ to_tsquery(concat(:query::text,':*')) ${
-            where ? `and ${where}` : ""
+            where && typeof where === "string" ? `and ${where}` : ""
           }`,
           {
             query: param,
-            ...(whereParams || {}),
+            ...(whereParams ?? {}),
           }
         )
         .orderBy(
@@ -190,7 +187,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     return false;
   }
 
-  private async checkIfExists(params: ObjectLiteral) {
+  private async checkIfExists(params: ObjectLiteral): Promise<boolean> {
     const query = await getRepository(this.repository).findOne({
       where: { ...params },
     });
@@ -219,8 +216,8 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     const endIndex = page * limit;
     const count = await getRepository(this.repository)
       .createQueryBuilder(this.repository.toString()[0])
-      .where(where?.cnt || "")
-      .setParameters(params?.cnt || {})
+      .where(where?.cnt ?? "")
+      .setParameters(params?.cnt ?? {})
       .getCount();
     const pages = Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit);
 
@@ -236,14 +233,14 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     if (endIndex < count) {
       data.next = {
         page: page + 1,
-        limit: limit,
+        limit,
       };
     }
 
     if (startIndex > 0) {
       data.previous = {
         page: page - 1,
-        limit: limit,
+        limit,
       };
     }
 
@@ -252,24 +249,34 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
       data.results = await this.query(query, [
         limit,
         startIndex,
-        ...(params?.q || ""),
+        ...(params?.q ?? ""),
       ]);
       return data;
     } catch (err) {
-      throw new HandleError(400, "Raw", `${err.field}: ${err.message}`);
+      throw new HandleError(
+        400,
+        "Raw",
+        `${String(err.field)}: ${String(err.message)}`
+      );
     }
   }
 
-  async retriveInstance(id?: number, where?: ObjectLiteral) {
+  async retriveInstance(
+    id?: number,
+    where?: ObjectLiteral
+  ): Promise<ObjectLiteral | undefined> {
     if (id) return await getRepository(this.repository).findOneOrFail(id);
     if (where)
       return await getRepository(this.repository).findOneOrFail({
-        where: where,
+        where,
       });
     return undefined;
   }
 
-  private shallowEqual(object1: ObjectLiteral, object2: ObjectLiteral) {
+  private shallowEqual(
+    object1: ObjectLiteral,
+    object2: ObjectLiteral
+  ): boolean {
     delete object2.id;
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
@@ -280,7 +287,7 @@ export default class BaseController<T extends EntityTarget<ObjectLiteral>>
     return true;
   }
 
-  private validateTypes(params: ObjectLiteral) {
+  private validateTypes(params: ObjectLiteral): void {
     const types = getRepository(this.repository).metadata.propertiesMap;
     if (this.shallowEqual(params, types)) return;
     throw new HandleError(400, "Validation", "Types are not matching");
