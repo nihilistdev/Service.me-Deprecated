@@ -2,10 +2,10 @@ import { Ticket } from "@database/entities/ticket/Ticket";
 import BaseController from "@root/core/BaseController";
 import { HandleError } from "@utils/response/errors/Error";
 import { Success } from "@utils/response/success/Success";
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 
 export class TicketController {
-  constructor(private base = new BaseController(Ticket)) {}
+  constructor(private readonly base = new BaseController(Ticket)) {}
 
   async create(req: Request, res: Response, next: NextFunction) {
     const { staff_id, title, description, sc_sc_id, customer_id } = req.body;
@@ -17,15 +17,15 @@ export class TicketController {
           checkIfAlreadyExists: true,
         }
       );
-      if (query!.raw[0]) res.json(new Success(200, "Query success").JSON);
-    } catch (err) {
+      if (query?.raw[0]) res.json(new Success(200, "Query success").JSON);
+    } catch (err: any) {
       next(new HandleError(400, "Raw", `${err.field}: ${err.message}`));
     }
   }
 
   async filter(req: Request, res: Response, next: NextFunction) {
-    const where = req.body["where"] as string;
-    const limit = req.body["limit"] as number;
+    const where = req.body.where as string;
+    const limit = req.body.limit as number;
 
     try {
       const query = await this.base.query(
@@ -58,10 +58,10 @@ export class TicketController {
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
-    const page = parseInt(req.query["page"] as string);
-    const limit = parseInt(req.query["limit"] as string);
-    const where = req.body["where"] || undefined;
-    const params = req.body["params"] || undefined;
+    const page = parseInt(req.query.page as string);
+    const limit = parseInt(req.query.limit as string);
+    const where = req.body.where || undefined;
+    const params = req.body.params || undefined;
     const sc_id = req.headers["x-sc-id"];
 
     try {
@@ -121,9 +121,9 @@ export class TicketController {
           description,
         },
         "id = :id",
-        { id: id }
+        { id }
       );
-      res.json(new Success(200, "Query success", query!.raw[0]));
+      res.json(new Success(200, "Query success", query?.raw[0]));
     } catch (err) {
       next(new HandleError(400, "Raw", `${err.field}: ${err.message}`));
     }

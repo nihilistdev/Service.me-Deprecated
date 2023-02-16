@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 import { HandleError } from "@utils/response/errors/Error";
 import Success from "@utils/response/success";
@@ -16,15 +16,15 @@ export const RegisterController = async (
   const { first_name, last_name, email, username, password } = req.body;
 
   try {
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ where: { email } });
     if (user) {
       const error = new HandleError(400, "General", "User already exists", [
         `User already exists on ${email}`,
       ]);
-      return next(error);
+      next(error);
     }
     try {
-      let hashPassword = await argon2.hash(password);
+      const hashPassword = await argon2.hash(password);
       const query = await getConnection()
         .createQueryBuilder()
         .insert()
@@ -45,21 +45,21 @@ export const RegisterController = async (
           "General",
           "There was an error while creating your account"
         );
-        return next(error);
+        next(error);
       }
       const token = v4();
       await req.redis.setKey(token, query.raw[0].id, "Verify-Account");
       const success = new Success(200, "User created successfuly", {
-        token: token,
+        token,
       });
       await ApiKeys.create({ user_id: query.raw[0].id, key: v4() }).save();
-      return res.json(success.JSON);
+      res.json(success.JSON);
     } catch (err) {
       const error = new HandleError(400, err.field, err.message, null, err);
-      return next(error);
+      next(error);
     }
   } catch (err) {
     const error = new HandleError(400, err.field, err.message, null, err);
-    return next(error);
+    next(error);
   }
 };
