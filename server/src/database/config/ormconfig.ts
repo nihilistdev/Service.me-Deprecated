@@ -1,4 +1,4 @@
-import { ConnectionOptions } from "typeorm";
+import { type ConnectionOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { __prod__ } from "@utils/constants/constants";
 

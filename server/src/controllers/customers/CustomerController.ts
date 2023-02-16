@@ -2,12 +2,12 @@ import { Customers } from "@database/entities/customers/customers";
 import BaseController from "@root/core/BaseController";
 import HandleError from "@utils/response/errors";
 import Success from "@utils/response/success";
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 export class CustomerController {
-  constructor(private base = new BaseController(Customers)) {}
+  constructor(private readonly base = new BaseController(Customers)) {}
 
   public async filterCustomer(req: Request, res: Response, next: NextFunction) {
-    const { text }: { [key: string]: string } = req.body;
+    const { text }: Record<string, string> = req.body;
     if (text.length === 0)
       res.json(new Success(200, "Query success", {} as Customers));
 
@@ -24,7 +24,7 @@ export class CustomerController {
     res: Response,
     next: NextFunction
   ) {
-    const where = req.body["where"] || undefined;
+    const where = req.body.where || undefined;
 
     try {
       const query = await this.base.query(
@@ -43,13 +43,8 @@ export class CustomerController {
     res: Response,
     next: NextFunction
   ) {
-    const {
-      first_name,
-      last_name,
-      email,
-      pin,
-      phone,
-    }: { [key: string]: string } = req.body;
+    const { first_name, last_name, email, pin, phone }: Record<string, string> =
+      req.body;
 
     try {
       const query = await this.base.create(
@@ -65,7 +60,7 @@ export class CustomerController {
           checkTypes: true,
         }
       );
-      res.json(new Success(200, "Query success", query!.raw[0]));
+      res.json(new Success(200, "Query success", query?.raw[0]));
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
     }
@@ -95,7 +90,7 @@ export class CustomerController {
       pin,
       phone,
       address,
-    }: { [key: string]: string } = req.body;
+    }: Record<string, string> = req.body;
 
     const instance = await Customers.findOneOrFail({
       where: { id: parseInt(id) },
@@ -113,10 +108,10 @@ export class CustomerController {
           address,
         },
         "id = :id",
-        { id: id }
+        { id }
       );
 
-      res.json(new Success(200, "Query success", query!.raw[0]));
+      res.json(new Success(200, "Query success", query?.raw[0]));
     } catch (err) {
       next(new HandleError(400, err.field, err.message));
     }

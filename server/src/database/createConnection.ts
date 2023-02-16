@@ -1,4 +1,8 @@
-import { Connection, createConnection, getConnectionManager } from "typeorm";
+import {
+  type Connection,
+  createConnection,
+  getConnectionManager,
+} from "typeorm";
 
 import db from "./config/ormconfig";
 

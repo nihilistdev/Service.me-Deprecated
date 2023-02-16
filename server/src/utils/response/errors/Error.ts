@@ -1,11 +1,11 @@
 export class HandleError extends Error {
   constructor(
-    private statusCode: number,
-    private errorType: ErrorType,
+    private readonly statusCode: number,
+    private readonly errorType: ErrorType,
     message: string,
-    private errors: any[] | null = null,
-    private errorRaw: any = null,
-    private errorValidation: ErrorValidation[] | null = null
+    private readonly errors: any[] | null = null,
+    private readonly errorRaw: any = null,
+    private readonly errorValidation: ErrorValidation[] | null = null
   ) {
     super(message);
   }

@@ -1,11 +1,11 @@
 import { Staff } from "@database/entities/staff/ScStaff";
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import BaseController from "@root/core/BaseController";
 import { Success } from "@utils/response/success/Success";
 import { HandleError } from "@utils/response/errors/Error";
 
 export default class StaffController {
-  constructor(private base = new BaseController(Staff)) {}
+  constructor(private readonly base = new BaseController(Staff)) {}
 
   async add(req: Request, res: Response, next: NextFunction) {
     const { user_id, sc_sc_id, roles_id } = req.body;
@@ -15,7 +15,7 @@ export default class StaffController {
         { user_id, sc_sc_id, roles_id },
         { checkIfAlreadyExists: true }
       );
-      if (query!.raw[0]) res.json(new Success(200, "Query success"));
+      if (query?.raw[0]) res.json(new Success(200, "Query success"));
     } catch (err) {
       next(new HandleError(400, "General", `${err.field}: ${err.message}`));
     }
@@ -33,10 +33,10 @@ export default class StaffController {
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
-    const page = parseInt(req.query["page"] as string);
-    const limit = parseInt(req.query["limit"] as string);
-    const where = req.body["where"] || undefined;
-    const params = req.body["params"] || undefined;
+    const page = parseInt(req.query.page as string);
+    const limit = parseInt(req.query.limit as string);
+    const where = req.body.where || undefined;
+    const params = req.body.params || undefined;
 
     try {
       const query = await this.base.paginationViewQuery(

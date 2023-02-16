@@ -8,7 +8,6 @@ import CountryRoute from "./CountryRoute";
 import StaffRoute from "./StaffRoute";
 import TicketRoute from "./TicektRoute";
 import TicketResolutionsRoute from "./TicketResolutions";
-import { __prod__ } from "@utils/constants/constants";
 
 const router = Router();
 

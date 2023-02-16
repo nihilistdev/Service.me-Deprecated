@@ -2,10 +2,10 @@ import { TicketResolutions } from "@database/entities/ticket_resolutions/TicketR
 import BaseController from "@root/core/BaseController";
 import { HandleError } from "@utils/response/errors/Error";
 import { Success } from "@utils/response/success/Success";
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 
 export class TicketResolutionsController {
-  constructor(private base = new BaseController(TicketResolutions)) {}
+  constructor(private readonly base = new BaseController(TicketResolutions)) {}
 
   async getOne(req: Request, res: Response, next: NextFunction) {
     const t_id = parseInt(req.params.ticket_id);
@@ -19,11 +19,11 @@ export class TicketResolutionsController {
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
-    const page = parseInt(req.query["page"] as string);
-    const limit = parseInt(req.query["limit"] as string);
-    const list = req.query["list"] || false;
-    const where = req.body["where"] || "";
-    const params = req.body["params"] || {};
+    const page = parseInt(req.query.page as string);
+    const limit = parseInt(req.query.limit as string);
+    const list = req.query.list ?? false;
+    const where = req.body.where || "";
+    const params = req.body.params || {};
     let query;
 
     try {
@@ -66,7 +66,7 @@ export class TicketResolutionsController {
           comment,
         },
         "id = :id",
-        { id: id }
+        { id }
       );
       res.json(new Success(200, "Query success", query));
     } catch (err) {
