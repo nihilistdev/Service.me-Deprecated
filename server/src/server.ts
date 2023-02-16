@@ -1,5 +1,7 @@
 import "reflect-metadata";
-import { COOKIE_NAME, __prod__ } from "@utils/constants";
+
+import { COOKIE_NAME } from "@utils/constants";
+
 import Redis from "ioredis";
 import { RedisContext } from "@context/Redis";
 import connectRedis from "connect-redis";
@@ -14,9 +16,9 @@ import routes from "@routes";
 import session from "express-session";
 
 declare module "express-session" {
-  interface SessionData {
+  type SessionData = SessionData & {
     userId: number;
-  }
+  };
 }
 
 const app = express();
@@ -51,14 +53,14 @@ app.use(
       domain: undefined,
     },
     saveUninitialized: false,
-    secret: process.env.SESSION_SECRET as string,
+    secret: process.env.SESSION_SECRET,
     resave: false,
   })
 );
 
 try {
   const accessLogStream = fs.createWriteStream(
-    path.join(__dirname + "/../log/logger.log"),
+    path.join(__dirname, "/../log/logger.log"),
     {
       flags: "a+",
     }

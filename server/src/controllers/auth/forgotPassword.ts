@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 import ConsoleDebug from "@utils/console";
 import HandleError from "@utils/response/errors";
@@ -11,7 +11,7 @@ export const forgotPassword = async (
   res: Response,
   next: NextFunction
 ) => {
-  let { email } = req.body;
+  const { email } = req.body;
 
   try {
     const user = await User.findOne({ where: { email } });
@@ -21,18 +21,30 @@ export const forgotPassword = async (
         "Raw",
         "User does not exist in database"
       );
-      return next(error);
+      next(error);
     }
     const token = v4();
-    req.redis.setKey(token, user.id, "Forgot-password");
-    const success = new Success(200, "Your verification email has been sent", {
-      token: token,
-    });
-    ConsoleDebug.info(`Generated token is ${token}`);
-    return res.json(success.JSON);
+    const redis_result = await req.redis.setKey(
+      token,
+      Number(user?.id),
+      "Forgot-password"
+    );
+    if (redis_result === "OK") {
+      const success = new Success(
+        200,
+        "Your verification email has been sent",
+        {
+          token,
+        }
+      );
+      ConsoleDebug.info(`Generated token is ${token}`);
+      res.json(success.JSON);
+    }
+    const error = new HandleError(400, "Raw", "An error occured");
+    res.json(error.JSON);
   } catch (err) {
     const error = new HandleError(400, "Raw", "An error occured", err);
     ConsoleDebug.error(err);
-    return next(error);
+    next(error);
   }
 };

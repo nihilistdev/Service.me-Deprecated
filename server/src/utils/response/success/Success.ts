@@ -1,8 +1,8 @@
 export class Success {
   constructor(
-    private httpStatusCode: number,
-    private message?: string,
-    private data?: any
+    private readonly httpStatusCode: number,
+    private readonly message?: string,
+    private readonly data?: any
   ) {}
 
   get JSON() {

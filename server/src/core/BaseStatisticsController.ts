@@ -1,8 +1,8 @@
 import { HandleError } from "@utils/response/errors/Error";
-import { EntityTarget, getRepository, ObjectLiteral } from "typeorm";
+import { type EntityTarget, getRepository, type ObjectLiteral } from "typeorm";
 
 export class BaseStatisticsController<T extends EntityTarget<ObjectLiteral>> {
-  constructor(private repository: T) {}
+  constructor(private readonly repository: T) {}
 
   async monthOpened(month: number, sc_id: number): Promise<T> {
     try {

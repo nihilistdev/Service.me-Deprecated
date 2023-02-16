@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 
 import { ACCOUNT_VERIFICATION_PREFIX } from "@utils/constants/constants";
 import HandleErorr from "@utils/response/errors";
@@ -10,10 +10,10 @@ export const verifyAccount = async (
   res: Response,
   next: NextFunction
 ) => {
-  let token = req.params.token;
+  const token = req.params.token;
 
   try {
-    let userId = await req.redis.getKey(ACCOUNT_VERIFICATION_PREFIX + token);
+    const userId = await req.redis.getKey(ACCOUNT_VERIFICATION_PREFIX + token);
     const user = await User.findOne({
       where: { id: parseInt(userId as string) },
     });
@@ -24,12 +24,12 @@ export const verifyAccount = async (
         "Raw",
         "There is no user by this id or token is invalid"
       );
-      return next(error);
+      next(error);
     }
 
     await User.update(
       {
-        id: user.id,
+        id: user?.id,
       },
       { confirmed: true }
     );
@@ -38,6 +38,6 @@ export const verifyAccount = async (
     res.json(success.JSON);
   } catch (err) {
     const error = new HandleErorr(400, "Raw", "Error", null, err, null);
-    return next(error);
+    next(error);
   }
 };

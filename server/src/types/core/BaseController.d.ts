@@ -1,16 +1,15 @@
 import {
-  EntityTarget,
-  getRepository,
-  InsertResult,
-  ObjectLiteral,
-  UpdateResult,
+  type EntityTarget,
+  type InsertResult,
+  type ObjectLiteral,
+  type UpdateResult,
 } from "typeorm";
 
 declare global {
-  export interface OptionsParams {
+  export type OptionsParams = {
     checkIfAlreadyExists?: boolean;
     checkTypes?: boolean;
-  }
+  };
   export declare class BaseControllerFunctions<
     T extends EntityTarget<ObjectLiteral>
   > {

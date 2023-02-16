@@ -3,8 +3,8 @@ import "reflect-metadata";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { createConnection } from "typeorm";
 
-export const testConn = (drop: boolean = false) =>
-  createConnection({
+export const testConn = async (drop: boolean = false) =>
+  await createConnection({
     name: "default",
     type: "postgres",
     host: "localhost",

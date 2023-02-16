@@ -1,7 +1,7 @@
-import { ObjectLiteral } from "typeorm";
+import type { ObjectLiteral } from "typeorm";
 
 declare global {
-  export type Filter = { [key: string]: string } & undefined;
+  export type Filter = Record<string, string> & undefined;
 
   export type ViewQueryWhere = {
     cnt: string;

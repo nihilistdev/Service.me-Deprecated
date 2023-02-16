@@ -9,10 +9,11 @@ export type FieldTypes = {
 
 export class BaseValidator {
   constructor(
-    private fields: FieldTypes[],
-    private errors: ErrorValidation[] = []
+    private readonly fields: FieldTypes[],
+    private readonly errors: ErrorValidation[] = []
   ) {}
 
+  // Rewrite validation
   validate(): ErrorValidation[] {
     Array.from(this.fields).map((el: FieldTypes) => {
       switch (typeof el.value) {

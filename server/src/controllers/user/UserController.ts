@@ -2,19 +2,19 @@ import { User } from "@database/entities/user/user";
 import BaseController from "@root/core/BaseController";
 import { HandleError } from "@utils/response/errors/Error";
 import { Success } from "@utils/response/success/Success";
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 
 export class UserController {
-  constructor(private base = new BaseController(User)) {}
+  constructor(private readonly base = new BaseController(User)) {}
 
   async update(req: Request, res: Response, next: NextFunction) {
     const id = parseInt(req.params.id);
     const { first_name, last_name, email, username } = req.body;
 
-    if (req.session.userId !== id)
-      return next(
-        new HandleError(403, "Unauthorized", "This user is not reachable!")
-      );
+    if (req.session.userId !== id) {
+      next(new HandleError(403, "Unauthorized", "This user is not reachable!"));
+      return;
+    }
 
     try {
       const instance = await this.base.retriveInstance(req.session.userId);
@@ -42,11 +42,11 @@ export class UserController {
 
     try {
       const query = await this.base.retriveInstance(req.session.userId);
-      delete query!.password;
-      delete query!.isActive;
-      delete query!.confirmed;
-      delete query!.created_at;
-      delete query!.updated_at;
+      delete query?.password;
+      delete query?.isActive;
+      delete query?.confirmed;
+      delete query?.created_at;
+      delete query?.updated_at;
       res.json(new Success(200, "Query success", query));
     } catch (err) {
       next(

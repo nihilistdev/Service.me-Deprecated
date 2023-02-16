@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { HandleError } from "@utils/response/errors/Error";
+import { type Request, type Response, type NextFunction } from "express";
+import { type HandleError } from "@utils/response/errors/Error";
 
 export const errorHandle = (
   err: HandleError,

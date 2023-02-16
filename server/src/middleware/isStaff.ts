@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import HandleError from "@utils/response/errors";
 import { Staff } from "@database/entities/staff/ScStaff";
 

@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 import { ServiceCenter } from "@database/entities/service_center/ServiceCenter";
 import HandleError from "@utils/response/errors";
 import { Success } from "@utils/response/success/Success";
 import BaseController from "@root/core/BaseController";
 
 export class ServiceCenterController {
-  constructor(private base = new BaseController(ServiceCenter)) {}
+  constructor(private readonly base = new BaseController(ServiceCenter)) {}
 
   async update(req: Request, res: Response, next: NextFunction) {
     const { name, address, city, phone, id_number } = req.body;
@@ -26,18 +26,18 @@ export class ServiceCenterController {
         "id = :id",
         { id: parseInt(id, 10) }
       );
-      if (query!.raw[0]) res.json(new Success(200, "Update success"));
+      if (query?.raw[0]) res.json(new Success(200, "Update success"));
     } catch (err) {
-      return next(new HandleError(400, err.field, err.message));
+      next(new HandleError(400, err.field, err.message));
     }
   }
 
   async list(req: Request, res: Response, next: NextFunction) {
-    const page = parseInt(req.query["page"] as string);
-    const limit = parseInt(req.query["limit"] as string);
-    const list = req.query["list"] || false;
-    const where = req.body["where"] || "";
-    const params = req.body["params"] || {};
+    const page = parseInt(req.query.page as string);
+    const limit = parseInt(req.query.limit as string);
+    const list = req.query.list ?? false;
+    const where = req.body.where || "";
+    const params = req.body.params || {};
     let query;
 
     try {
@@ -68,7 +68,7 @@ export class ServiceCenterController {
           checkIfAlreadyExists: true,
         }
       );
-      res.json(new Success(200, "Query success", query!.raw[0]));
+      res.json(new Success(200, "Query success", query?.raw[0]));
     } catch (err) {
       next(new HandleError(400, "Raw", err.field, err.message));
     }
@@ -78,10 +78,10 @@ export class ServiceCenterController {
     const id = req.params.id;
 
     try {
-      const query = await this.base.delete({id: parseInt(id)});
-      if(query) res.json(new Success(200, "Query success"))
-    } catch(err) {
-      next(new HandleError(400, "Raw", err.field, err.message))
+      const query = await this.base.delete({ id: parseInt(id) });
+      if (query) res.json(new Success(200, "Query success"));
+    } catch (err) {
+      next(new HandleError(400, "Raw", err.field, err.message));
     }
   }
 }

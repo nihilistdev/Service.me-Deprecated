@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { type NextFunction, type Request, type Response } from "express";
 
 import HandleError from "@utils/response/errors";
 
@@ -7,13 +7,14 @@ export const isApiKeyGiven = (
   _: Response,
   next: NextFunction
 ) => {
-  if (req.headers["api_key"] || req.headers["x-api-key"]) {
-    return next()
-  };
+  if (req.headers.api_key ?? req.headers["x-api-key"]) {
+    next();
+    return;
+  }
   const error = new HandleError(
     403,
     "Validation",
     "Given api_key is not valid"
   );
-  return next(error);
+  next(error);
 };
