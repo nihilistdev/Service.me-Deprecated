@@ -1,4 +1,3 @@
-import "dotenv/config";
 import "reflect-metadata";
 
 import { COOKIE_NAME } from "@utils/constants";
